@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "357949018251",
+    "project_id": "smarttask-12541",
+    "storage_bucket": "smarttask-12541.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:357949018251:android:267cde953e87099255448e",
+        "android_client_info": {
+          "package_name": "com.smarttask.kalidapp.smart_mobile_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgAs1TQkwpqgBg18vmn5Z4-okj6lbiok4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
