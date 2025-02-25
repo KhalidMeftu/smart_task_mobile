@@ -1,3 +1,5 @@
+import 'package:smart_mobile_app/domain/entity/responses/get_all_tasks_reponse.dart';
+
 import '../../core/network/api_client.dart';
 
 class TaskRepository {
@@ -61,4 +63,7 @@ class TaskRepository {
       'username': username,
     });
   }
+
+
+
 }
