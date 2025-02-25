@@ -1,15 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/task_providers.dart';
 
-
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/task_providers.dart';
-
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/task_providers.dart';
 
 class TaskListScreen extends StatefulWidget {
   @override
@@ -22,7 +13,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
   @override
   void initState() {
     super.initState();
-
+/*
     Future.delayed(Duration.zero, () {
       final taskProvider = Provider.of<TaskProvider>(context, listen: false);
       taskProvider.fetchTasks(); // Fetch tasks once when screen loads
@@ -33,13 +24,15 @@ class _TaskListScreenState extends State<TaskListScreen> {
         _isListening = true;
       }
     });
+    */
   }
 
   @override
   Widget build(BuildContext context) {
-    final taskProvider = Provider.of<TaskProvider>(context);
+    return Scaffold();
+    //final taskProvider = Provider.of<TaskProvider>(context);
 
-    return Scaffold(
+    /*return Scaffold(
       appBar: AppBar(title: Text("Task List")),
       body: taskProvider.tasks.isEmpty
           ? Center(child: Text("No tasks available"))
@@ -70,6 +63,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
         },
       ),
     );
+    */
   }
 }
 

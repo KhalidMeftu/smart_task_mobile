@@ -1,5 +1,5 @@
 
-import 'package:smart_mobile_app/data/repositories/task_repository.dart';
+import 'package:smart_mobile_app/domain/repository/task_repository.dart';
 
 class TaskUseCase {
   final TaskRepository _taskRepository;
@@ -10,12 +10,18 @@ class TaskUseCase {
     return _taskRepository.getTasks();
   }
 
-  Future<void> createTask(String title, String description, String? deadline, String? color, List<int> userIds) {
-    return _taskRepository.createTask(title, description, deadline, color,userIds);
+  Future<void> createTask(String title, String description, String? deadline,
+      String? startDate,
+      String?endDate,
+      List<int> userIds) {
+    return _taskRepository.createTask(title, description, deadline, startDate,endDate,userIds);
   }
 
-  Future<void> updateTask(int taskId, String title, String description, String? deadline, String? color) {
-    return _taskRepository.updateTask(taskId, title, description, deadline, color);
+  Future<void> updateTask(int taskId,String title, String description, String? deadline,
+      String? startDate,
+      String?endDate,
+      List<int> userIds) {
+    return _taskRepository.updateTask(taskId, title, description, deadline, startDate, endDate,userIds);
   }
 
   Future<void> deleteTask(int taskId) {

@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import '../../core/network/api_client.dart';
 
 class TaskRepository {
@@ -17,23 +16,32 @@ class TaskRepository {
   }
 
 
-  Future<void> createTask(String title, String description, String? deadline, String? color,List<int> userIds) async {
+  Future<void> createTask(String title, String description, String? deadline,
+      String? startDate,
+      String?endDate,
+      List<int> userIds) async {
     await _apiClient.post('/tasks', data: {
       'title': title,
       'description': description,
       'deadline': deadline,
-      'color': color,
+      'start_date': startDate,
+      'end_date': endDate,
       'user_ids':userIds
 
     });
   }
 
-  Future<void> updateTask(int taskId, String title, String description, String? deadline, String? color) async {
+  Future<void> updateTask(int taskId,String title, String description, String? deadline,
+      String? startDate,
+      String?endDate,
+      List<int> userIds) async {
     await _apiClient.post('/tasks/$taskId', data: {
       'title': title,
       'description': description,
       'deadline': deadline,
-      'color': color
+      'start_date': startDate,
+      'end_date': endDate,
+      'user_ids':userIds
     });
   }
 

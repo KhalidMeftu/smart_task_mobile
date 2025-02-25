@@ -12,15 +12,15 @@ class UserListScreen extends StatefulWidget {
 
 class _UserListScreenState extends State<UserListScreen> {
   List<Map<String, dynamic>> users = [];
-  final ApiClient _apiClient = ApiClient();
+  //final ApiClient _apiClient = ApiClient();
 
   @override
   void initState() {
     super.initState();
-    fetchUsers();
+   // fetchUsers();
   }
 
-  Future<void> fetchUsers() async {
+ /* Future<void> fetchUsers() async {
     try {
       final response = await _apiClient.get('/users'); // ✅ Uses `ApiClient`
       setState(() {
@@ -30,7 +30,7 @@ class _UserListScreenState extends State<UserListScreen> {
       print("Error fetching users: $e");
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Failed to fetch users")));
     }
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {

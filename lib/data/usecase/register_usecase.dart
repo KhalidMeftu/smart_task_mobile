@@ -1,5 +1,4 @@
-
-import 'package:smart_mobile_app/data/repositories/AuthRepositories.dart';
+import 'package:smart_mobile_app/domain/repository/AuthRepositories.dart';
 
 class RegisterUseCase {
   final AuthRepository _authRepository;

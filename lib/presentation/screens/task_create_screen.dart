@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/task_providers.dart';
-import 'user_list_screen.dart';
-
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'user_list_screen.dart';
 
 class TaskCreateScreen extends StatefulWidget {
@@ -38,7 +33,7 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final taskProvider = Provider.of<TaskProvider>(context);
+   // final taskProvider = Provider.of<TaskProvider>(context);
 
     return Scaffold(
       appBar: AppBar(title: Text('Create Task')),
@@ -60,7 +55,7 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
-                await taskProvider.createTask(
+                /*await taskProvider.createTask(
                   titleController.text,
                   descriptionController.text,
                   deadlineController.text,
@@ -68,7 +63,7 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
                   selectedUserIds, // ✅ Send selected users
                 );
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Task Created Successfully")));
-                Navigator.pop(context);
+                Navigator.pop(context);*/
               },
               child: Text('Create Task'),
             ),

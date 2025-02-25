@@ -1,65 +1,49 @@
 import 'package:flutter/material.dart';
-import '../../core/network/websocket_service.dart';
-import '../../core/notifications/fcm_services.dart';
-import '../../data/usecase/login_usecase.dart';
-import '../../data/usecase/register_usecase.dart';
+import 'package:smart_mobile_app/data/usecase/login_usecase.dart';
+import 'package:smart_mobile_app/dependency_injection.dart';
+import 'package:smart_mobile_app/domain/repository/AuthRepositories.dart';
 
 class AuthProvider with ChangeNotifier {
-  final LoginUseCase _loginUseCase;
-  final RegisterUseCase _registerUseCase;
-  final FCMService _fcmService;
-  final WebSocketService _webSocketService;
-  bool _isLoading = false;
+  final LoginUseCase _loginUseCase = getIt<LoginUseCase>();
   String? _token;
+  bool _isLoading = false;
+  String? _error;
 
-  AuthProvider(this._loginUseCase, this._registerUseCase, this._fcmService, this._webSocketService);
-
-  bool get isLoading => _isLoading;
   String? get token => _token;
+  bool get isLoading => _isLoading;
+  String? get error => _error;
 
   Future<void> login(String email, String password) async {
     _isLoading = true;
+    _error = null;
     notifyListeners();
-
     try {
       _token = await _loginUseCase.execute(email, password);
-
-      String? fcmToken = await _fcmService.getToken();
-      if (fcmToken != null) {
-        await _loginUseCase.sendFcmToken(fcmToken);
-      }
-
-      _webSocketService.connect(_token!);
-
     } catch (e) {
-      _token = null;
-      print("Login Failed: $e");
+      _error = e.toString();
     }
-
     _isLoading = false;
     notifyListeners();
   }
 
   Future<void> register(String name, String email, String password) async {
     _isLoading = true;
+    _error = null;
     notifyListeners();
-
     try {
-      _token = await _registerUseCase.execute(name, email, password);
-
-      String? fcmToken = await _fcmService.getToken();
-      if (fcmToken != null) {
-        await _loginUseCase.sendFcmToken(fcmToken);
-      }
-
-      _webSocketService.connect(_token!);
-
+      _token = await getIt<AuthRepository>().register(name, email, password);
     } catch (e) {
-      _token = null;
-      print("Registration Failed: $e");
+      _error = e.toString();
     }
-
     _isLoading = false;
     notifyListeners();
+  }
+
+  Future<void> sendFcmToken(String fcmToken) async {
+    try {
+      await _loginUseCase.sendFcmToken(fcmToken);
+    } catch (e) {
+      print("Failed to send FCM token: $e");
+    }
   }
 }
