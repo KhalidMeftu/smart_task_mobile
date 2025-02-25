@@ -6,6 +6,7 @@ import 'package:smart_mobile_app/presentation/screens/home_screen.dart';
 import 'common/routes/app_routes.dart';
 import 'dependency_injection.dart';
 import 'firebase_options.dart';
+import 'new_presentation/presentation/screens/auth_wrapper.dart';
 import 'presentation/providers/auth_provider.dart';
 import 'presentation/screens/login_screen.dart';
 
@@ -33,18 +34,15 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<AuthTokenProvider>(
-        builder: (context, authProvider, _) {
-          return MaterialApp(
-            title: 'Smart Task App',
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-            ),
-            onGenerateRoute: RouteGenerator.getRoute,
-            initialRoute: authProvider.token != null
-                ? SmartTaskAppRoutes.homePage
-                : SmartTaskAppRoutes.loginPage,
-          );
-        });
+
+    return MaterialApp(
+      title: 'Smart Task App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const AuthWrapper(),
+      onGenerateRoute: RouteGenerator.getRoute,
+    );
+
   }
 }

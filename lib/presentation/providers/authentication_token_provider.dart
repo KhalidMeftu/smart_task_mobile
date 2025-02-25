@@ -13,6 +13,9 @@ class AuthTokenProvider with ChangeNotifier {
 
   Future<void> _checkAuthToken() async {
     _token = await _apiClient.getAuthToken();
+    print("Notifying Listners");
+    print(_token);
+    print(token);
     notifyListeners();
   }
 }

@@ -10,8 +10,8 @@ class ApiClient {
   ApiClient({required this.baseUrl}) {
     _dio = Dio(BaseOptions(
       baseUrl: baseUrl,
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 10),
+      connectTimeout: const Duration(seconds: 180),
+      receiveTimeout: const Duration(seconds: 180),
     ));
     _dio.interceptors.add(PrettyDioLogger());
     _initializeAuthToken();
@@ -38,7 +38,8 @@ class ApiClient {
   }
 
   Future<String?> getUserID() async {
-    return await _secureStorage.read(key: 'user_id');
+    String? savedUserID = await _secureStorage.read(key: 'user_id');
+    return savedUserID;
   }
 
   Future<String?> getAuthToken() async {

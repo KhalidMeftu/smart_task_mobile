@@ -13,30 +13,41 @@ class AuthProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get error => _error;
 
-  Future<void> login(String email, String password) async {
+  Future<bool> login(String email, String password) async {
     _isLoading = true;
     _error = null;
     notifyListeners();
+
     try {
       _token = await _loginUseCase.execute(email, password);
+      _isLoading = false;
+      notifyListeners();
+      return true; // Login successful
     } catch (e) {
       _error = e.toString();
+      _isLoading = false;
+      notifyListeners();
+      return false; // Login failed
     }
-    _isLoading = false;
-    notifyListeners();
   }
 
-  Future<void> register(String name, String email, String password) async {
+
+  Future<bool> register(String name, String email, String password) async {
     _isLoading = true;
     _error = null;
     notifyListeners();
+
     try {
       _token = await getIt<AuthRepository>().register(name, email, password);
+      _isLoading = false;
+      notifyListeners();
+      return true;
     } catch (e) {
       _error = e.toString();
+      _isLoading = false;
+      notifyListeners();
+      return false;
     }
-    _isLoading = false;
-    notifyListeners();
   }
 
   Future<void> sendFcmToken(String fcmToken) async {
