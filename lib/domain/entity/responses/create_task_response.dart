@@ -40,7 +40,7 @@ class Task {
   final DateTime updatedAt;
   final DateTime createdAt;
   final int id;
-  final List<User> users;
+  final List<TaskUsers> users;
 
   Task({
     required this.title,
@@ -67,7 +67,7 @@ class Task {
     updatedAt: DateTime.parse(json["updated_at"]),
     createdAt: DateTime.parse(json["created_at"]),
     id: json["id"],
-    users: List<User>.from(json["users"].map((x) => User.fromJson(x))),
+    users: List<TaskUsers>.from(json["users"].map((x) => TaskUsers.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -85,7 +85,7 @@ class Task {
   };
 }
 
-class User {
+class TaskUsers {
   final int id;
   final String name;
   final String email;
@@ -96,7 +96,7 @@ class User {
   final DateTime updatedAt;
   final Pivot pivot;
 
-  User({
+  TaskUsers({
     required this.id,
     required this.name,
     required this.email,
@@ -108,7 +108,7 @@ class User {
     required this.pivot,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
+  factory TaskUsers.fromJson(Map<String, dynamic> json) => TaskUsers(
     id: json["id"],
     name: json["name"],
     email: json["email"],

@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:smart_mobile_app/domain/entity/responses/get_all_tasks_reponse.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:web_socket_channel/status.dart' as status;
-
 
 class WebSocketService {
   IOWebSocketChannel? _channel;
@@ -15,7 +15,7 @@ class WebSocketService {
   bool _isReconnecting = false;
   String? _token;
   String? _userId;
-  final String _webSocketUrl = 'ws://192.168.8.126:6001/app/local';
+  final String _webSocketUrl = 'ws://192.168.8.108:6001/app/my-local-key';
 
   /// Channels that require user ID
   List<String> channels = [
@@ -23,19 +23,20 @@ class WebSocketService {
     "tasksstatusupdate.user.",
     "usertasks.update",
     "userdelete.",
-    "useredit."
+    "useredit.",
   ];
 
   /// Initialize WebSocket connection
   Future<void> connect() async {
     _token = await _getAuthToken();
-    _userId = await _getUserId(); // Get user ID from secure storage
+    _userId = await _getUserId();
 
     if (_token != null && _userId != null) {
       _initializeWebSocket();
     } else {
       if (kDebugMode) {
-        print("WebSocketService: Missing token or user ID. Connection aborted.");
+        print(
+            "WebSocketService: Missing token or user ID. Connection aborted.");
       }
       // todo Handle logout or redirect to login
     }
@@ -60,32 +61,7 @@ class WebSocketService {
         print("WebSocketService: Connecting...");
       }
       _channel = IOWebSocketChannel.connect('$_webSocketUrl?token=$_token');
-
       _isConnected = true;
-
-      // Subscribe to user-specific channels
-      _subscribeToChannels(_channel, channels, _userId!);
-
-      _subscription = _channel!.stream.listen(
-            (message) {
-          if (kDebugMode) {
-            print("WebSocket message received: $message");
-          }
-          _controller.add(message);
-        },
-        onError: (error) {
-          if (kDebugMode) {
-            print("WebSocket error: $error");
-          }
-          _handleDisconnect();
-        },
-        onDone: () {
-          if (kDebugMode) {
-            print("WebSocket connection closed.");
-          }
-          _handleDisconnect();
-        },
-      );
     } catch (e) {
       if (kDebugMode) {
         print("WebSocketService: Connection failed - $e");
@@ -134,6 +110,32 @@ class WebSocketService {
     }
   }
 
+  Stream<GetAllTaskResponse> get tasks {
+    print("WebSockets tasks");
+    print(_channel == null);
+
+    if (_channel == null) {
+      return const Stream.empty(); // Return an empty stream if not connected
+    }
+
+    return _channel!.stream.map((message) {
+      print(message.toString());
+      //  try {
+      final jsonData = jsonDecode(message); // Parse JSON safely
+
+      if (jsonData is Map<String, dynamic> && jsonData.containsKey('tasks')) {
+        return GetAllTaskResponse.fromJson(
+            jsonData); // Convert to GetAllTaskResponse
+      } else {
+        throw Exception("Invalid JSON structure");
+      }
+      //  } catch (e) {
+      //  print("Error parsing WebSocket message: $e");
+      //   throw Exception("Invalid WebSocket data");
+      //}
+    });
+  }
+
   /// disconnect cleanly
   void disconnect() {
     _subscription?.cancel();
@@ -141,23 +143,6 @@ class WebSocketService {
     _isConnected = false;
     if (kDebugMode) {
       print("WebSocketService: Disconnected.");
-    }
-  }
-
-  /// Subscribe to user-specific channels
-  void _subscribeToChannels(IOWebSocketChannel? channel, List<String> channelNames, String userId) {
-    if (channel == null) return;
-
-    for (var channelName in channelNames) {
-      String fullChannelName = "$channelName$userId";
-      channel.sink.add(jsonEncode({
-        "event": "pusher:subscribe",
-        "data": {"channel": fullChannelName}
-      }));
-
-      if (kDebugMode) {
-        print("Subscribed to: $fullChannelName");
-      }
     }
   }
 }

@@ -1,13 +1,13 @@
-// To parse this JSON data, do
-//
-//     final getAllTaskResponse = getAllTaskResponseFromJson(jsonString);
-
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
-GetAllTaskResponse getAllTaskResponseFromJson(String str) => GetAllTaskResponse.fromJson(json.decode(str));
+import 'create_task_response.dart';
 
-String getAllTaskResponseToJson(GetAllTaskResponse data) => json.encode(data.toJson());
+GetAllTaskResponse getAllTaskResponseFromJson(String str) =>
+    GetAllTaskResponse.fromJson(json.decode(str));
+
+String getAllTaskResponseToJson(GetAllTaskResponse data) =>
+    json.encode(data.toJson());
 
 class GetAllTaskResponse {
   final List<Task> tasks;
@@ -16,33 +16,32 @@ class GetAllTaskResponse {
     required this.tasks,
   });
 
-  factory GetAllTaskResponse.fromJson(Map<String, dynamic> json) => GetAllTaskResponse(
-    tasks: List<Task>.from(json["tasks"].map((x) => Task.fromJson(x))),
-  );
+  factory GetAllTaskResponse.fromJson(Map<String, dynamic> json) =>
+      GetAllTaskResponse(
+        tasks: List<Task>.from(json["tasks"].map((x) => Task.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "tasks": List<dynamic>.from(tasks.map((x) => x.toJson())),
-  };
+        "tasks": List<dynamic>.from(tasks.map((x) => x.toJson())),
+      };
 }
 
 class Task {
   final int id;
-  final Title title;
-  final Description description;
-  final DateTime deadline;
+  final String title;
+  final String description;
   final int createdBy;
   final DateTime createdAt;
   final DateTime updatedAt;
   final Status status;
   final DateTime startDate;
   final DateTime endDate;
-  final List<User> users;
+  final List<TaskUsers>? users;
 
   Task({
     required this.id,
     required this.title,
     required this.description,
-    required this.deadline,
     required this.createdBy,
     required this.createdAt,
     required this.updatedAt,
@@ -53,57 +52,43 @@ class Task {
   });
 
   factory Task.fromJson(Map<String, dynamic> json) => Task(
-    id: json["id"],
-    title: titleValues.map[json["title"]]!,
-    description: descriptionValues.map[json["description"]]!,
-    deadline: DateTime.parse(json["deadline"]),
-    createdBy: json["created_by"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
-    status: statusValues.map[json["status"]]!,
-    startDate: DateTime.parse(json["start_date"]),
-    endDate: DateTime.parse(json["end_date"]),
-    users: List<User>.from(json["users"].map((x) => User.fromJson(x))),
-  );
+        id: json["id"],
+        title:json["title"]!,
+        description:json["description"]!,
+        createdBy: json["created_by"],
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+        status: statusValues.map[json["status"]]!,
+        startDate: DateTime.parse(json["start_date"]),
+        endDate: DateTime.parse(json["end_date"]),
+        users: List<TaskUsers>.from(json["users"].map((x) => TaskUsers.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "title": titleValues.reverse[title],
-    "description": descriptionValues.reverse[description],
-    "deadline": deadline.toIso8601String(),
-    "created_by": createdBy,
-    "created_at": createdAt.toIso8601String(),
-    "updated_at": updatedAt.toIso8601String(),
-    "status": statusValues.reverse[status],
-    "start_date": startDate.toIso8601String(),
-    "end_date": endDate.toIso8601String(),
-    "users": List<dynamic>.from(users.map((x) => x.toJson())),
-  };
+        "id": id,
+        "title": titleValues.reverse[title],
+        "description": descriptionValues.reverse[description],
+        "created_by": createdBy,
+        "created_at": createdAt.toIso8601String(),
+        "updated_at": updatedAt.toIso8601String(),
+        "status": statusValues.reverse[status],
+        "start_date": startDate.toIso8601String(),
+        "end_date": endDate.toIso8601String(),
+        "users": List<dynamic>.from(users!.map((x) => x.toJson()))??[],
+      };
 }
 
-enum Description {
-  DESCRIPTION
-}
+enum Description { DESCRIPTION }
 
-final descriptionValues = EnumValues({
-  "description": Description.DESCRIPTION
-});
+final descriptionValues = EnumValues({"description": Description.DESCRIPTION});
 
-enum Status {
-  PENDING
-}
+enum Status { PENDING }
 
-final statusValues = EnumValues({
-  "pending": Status.PENDING
-});
+final statusValues = EnumValues({"pending": Status.PENDING});
 
-enum Title {
-  TEST_TASK
-}
+enum Title { TEST_TASK }
 
-final titleValues = EnumValues({
-  "test Task": Title.TEST_TASK
-});
+final titleValues = EnumValues({"test Task": Title.TEST_TASK});
 
 class User {
   final int id;
@@ -129,45 +114,37 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-    id: json["id"],
-    name: nameValues.map[json["name"]]!,
-    email: emailValues.map[json["email"]]!,
-    emailVerifiedAt: json["email_verified_at"],
-    google2FaSecret: json["google2fa_secret"],
-    fcmToken: json["fcm_token"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
-    pivot: Pivot.fromJson(json["pivot"]),
-  );
+        id: json["id"],
+        name: nameValues.map[json["name"]]!,
+        email: emailValues.map[json["email"]]!,
+        emailVerifiedAt: json["email_verified_at"],
+        google2FaSecret: json["google2fa_secret"],
+        fcmToken: json["fcm_token"],
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+        pivot: Pivot.fromJson(json["pivot"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": nameValues.reverse[name],
-    "email": emailValues.reverse[email],
-    "email_verified_at": emailVerifiedAt,
-    "google2fa_secret": google2FaSecret,
-    "fcm_token": fcmToken,
-    "created_at": createdAt.toIso8601String(),
-    "updated_at": updatedAt.toIso8601String(),
-    "pivot": pivot.toJson(),
-  };
+        "id": id,
+        "name": nameValues.reverse[name],
+        "email": emailValues.reverse[email],
+        "email_verified_at": emailVerifiedAt,
+        "google2fa_secret": google2FaSecret,
+        "fcm_token": fcmToken,
+        "created_at": createdAt.toIso8601String(),
+        "updated_at": updatedAt.toIso8601String(),
+        "pivot": pivot.toJson(),
+      };
 }
 
-enum Email {
-  JOHN_EXAMPLE_COM
-}
+enum Email { JOHN_EXAMPLE_COM }
 
-final emailValues = EnumValues({
-  "john@example.com": Email.JOHN_EXAMPLE_COM
-});
+final emailValues = EnumValues({"john@example.com": Email.JOHN_EXAMPLE_COM});
 
-enum Name {
-  JOHN_DOE
-}
+enum Name { JOHN_DOE }
 
-final nameValues = EnumValues({
-  "John Doe": Name.JOHN_DOE
-});
+final nameValues = EnumValues({"John Doe": Name.JOHN_DOE});
 
 class Pivot {
   final int taskId;
@@ -179,14 +156,14 @@ class Pivot {
   });
 
   factory Pivot.fromJson(Map<String, dynamic> json) => Pivot(
-    taskId: json["task_id"],
-    userId: json["user_id"],
-  );
+        taskId: json["task_id"],
+        userId: json["user_id"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "task_id": taskId,
-    "user_id": userId,
-  };
+        "task_id": taskId,
+        "user_id": userId,
+      };
 }
 
 class EnumValues<T> {

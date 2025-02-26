@@ -48,6 +48,7 @@ dependencies:
   table_calendar: ^3.2.0
   intl:
   flutter_svg: ^2.0.17  #using this for parsing svg images
+  sembast:
 
 
 dev_dependencies:

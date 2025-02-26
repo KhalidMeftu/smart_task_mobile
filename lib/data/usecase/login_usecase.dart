@@ -10,6 +10,10 @@ class LoginUseCase {
     return _authRepository.login(email, password);
   }
 
+  Future<String> executeRegister(String name, String email, String password) {
+    return _authRepository.register(name, email, password);
+  }
+
   Future<void> sendFcmToken(String fcmToken) {
     return _authRepository.sendFcmToken(fcmToken);
   }

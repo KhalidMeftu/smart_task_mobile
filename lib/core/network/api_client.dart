@@ -8,11 +8,17 @@ class ApiClient {
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
   ApiClient({required this.baseUrl}) {
-    _dio = Dio(BaseOptions(
-      baseUrl: baseUrl,
-      connectTimeout: const Duration(seconds: 180),
-      receiveTimeout: const Duration(seconds: 180),
-    ));
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: baseUrl,
+        connectTimeout: const Duration(seconds: 180),
+        receiveTimeout: const Duration(seconds: 180),
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+      ),
+    );
     _dio.interceptors.add(PrettyDioLogger());
     _initializeAuthToken();
   }
@@ -51,7 +57,8 @@ class ApiClient {
     _dio.options.headers.remove('Authorization');
   }
 
-  Future<Response> get(String path) async => _performRequest(() => _dio.get(path));
+  Future<Response> get(String path) async =>
+      _performRequest(() => _dio.get(path));
 
   Future<Response> post(String path, {Map<String, dynamic>? data}) async =>
       _performRequest(() => _dio.post(path, data: data));

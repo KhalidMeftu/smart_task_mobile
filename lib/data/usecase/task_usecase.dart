@@ -1,4 +1,6 @@
 
+import 'package:smart_mobile_app/domain/entity/responses/get_all_tasks_reponse.dart';
+import 'package:smart_mobile_app/domain/entity/responses/get_users_response.dart';
 import 'package:smart_mobile_app/domain/repository/task_repository.dart';
 
 class TaskUseCase {
@@ -6,15 +8,18 @@ class TaskUseCase {
 
   TaskUseCase(this._taskRepository);
 
-  Future<List<dynamic>> getTasks() {
+  Future<List<GetAllTaskResponse>> getTasks() async {
     return _taskRepository.getTasks();
   }
+  Future<List<GetUsersResponse>> getUsers() async {
+    return _taskRepository.getUsers();
+  }
 
-  Future<void> createTask(String title, String description, String? deadline,
+  Future<void> createTask(String title, String description,
       String? startDate,
       String?endDate,
       List<int> userIds) {
-    return _taskRepository.createTask(title, description, deadline, startDate,endDate,userIds);
+    return _taskRepository.createTask(title, description, startDate,endDate,userIds);
   }
 
   Future<void> updateTask(int taskId,String title, String description, String? deadline,
@@ -39,4 +44,9 @@ class TaskUseCase {
   Future<void> startEditingTask(int taskId, String username) async {
     await _taskRepository.startEditingTask(taskId, username);
   }
+  Future<void> updateUserFirebaseToken(String fcmID) async {
+    await _taskRepository.updateFirebaseCloudMessaging(fcmID);
+  }
+
+
 }

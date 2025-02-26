@@ -9,7 +9,6 @@ import 'package:smart_mobile_app/new_presentation/presentation/common_widgets/cu
 import 'package:smart_mobile_app/new_presentation/presentation/common_widgets/custom_textfield/custom_text_field.dart';
 import 'package:smart_mobile_app/presentation/providers/auth_provider.dart';
 
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -33,18 +32,13 @@ class _LoginScreenState extends State<LoginScreen> {
         passwordController.text.trim(),
       );
 
-
-
       setState(() => isLoading = false);
-
 
       if (success) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.pushReplacementNamed(context, SmartTaskAppRoutes.addTask);
+          Navigator.pushReplacementNamed(context, SmartTaskAppRoutes.homePage);
         });
-      }
-      else {
-
+      } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Invalid email or password")),
         );
@@ -67,7 +61,8 @@ class _LoginScreenState extends State<LoginScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           const SizedBox(height: 50),
-          CustomImageView(imagePath: 'assets/images/login_signup_header_image.png'),
+          CustomImageView(
+              imagePath: 'assets/images/login_signup_header_image.png'),
           Center(
             child: Text(
               "Smart Task Management",
@@ -90,7 +85,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   keyboardType: TextInputType.emailAddress,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: SmartTaskPaddings.s16),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: SmartTaskPaddings.s16),
                   child: CustomTextField(
                     required: true,
                     hintText: 'Password',
@@ -102,10 +98,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 isLoading
                     ? const CircularProgressIndicator()
                     : CustomButton(
-                  onTap: _login,
-                  text: "Login",
-                  bgColor: SmartTaskAppColors.buttonBackGroundColor,
-                ),
+                        onTap: _login,
+                        text: "Login",
+                        bgColor: SmartTaskAppColors.buttonBackGroundColor,
+                      ),
                 const SizedBox(height: SmartTaskPaddings.s16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -115,7 +111,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(color: SmartTaskAppColors.primaryColor),
                     ),
                     GestureDetector(
-                      onTap: () => Navigator.pushNamed(context, SmartTaskAppRoutes.signUpPage),
+                      onTap: () => Navigator.pushNamed(
+                          context, SmartTaskAppRoutes.signUpPage),
                       child: Text(
                         "Sign Up",
                         style: TextStyle(
@@ -134,4 +131,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-

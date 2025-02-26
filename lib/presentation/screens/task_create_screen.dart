@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'user_list_screen.dart';
 
 class TaskCreateScreen extends StatefulWidget {
+  const TaskCreateScreen({super.key});
+
   @override
   _TaskCreateScreenState createState() => _TaskCreateScreenState();
 }
@@ -44,17 +45,27 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
             TextField(controller: titleController, decoration: InputDecoration(labelText: 'Task Title')),
             TextField(controller: descriptionController, decoration: InputDecoration(labelText: 'Description')),
             TextField(controller: deadlineController, decoration: InputDecoration(labelText: 'Deadline (YYYY-MM-DD)')),
-            TextField(controller: colorController, decoration: InputDecoration(labelText: 'Task Color (HEX)')),
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: () => _selectUser(context),
               child: Text('Select Users'),
             ),
             SizedBox(height: 10),
-            Text("Selected Users: ${selectedUserIds.join(', ')}"), // ✅ Show selected users
+            Text("Selected Users: ${selectedUserIds.join(', ')}"),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
+
+                print("Title is");
+                print(titleController.text);
+                print("Description is");
+                print(descriptionController.text);
+                print("EndDate is");
+
+                print("StartDateis");
+
+                print("Selected user IDS");
+                print(selectedUserIds);
                 /*await taskProvider.createTask(
                   titleController.text,
                   descriptionController.text,

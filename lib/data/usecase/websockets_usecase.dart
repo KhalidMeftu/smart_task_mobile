@@ -6,5 +6,4 @@ class ListenWebSocket {
   final TaskRepository taskRepository;
   ListenWebSocket(this.repository, this.taskRepository);
 
-
 }

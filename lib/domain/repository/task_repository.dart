@@ -1,69 +1,34 @@
 import 'package:smart_mobile_app/domain/entity/responses/get_all_tasks_reponse.dart';
+import 'package:smart_mobile_app/domain/entity/responses/get_users_response.dart';
 
 import '../../core/network/api_client.dart';
 
-class TaskRepository {
+
+abstract class TaskRepository {
   final ApiClient _apiClient;
 
   TaskRepository(this._apiClient);
 
-  Future<List<dynamic>> getTasks() async {
-    final response = await _apiClient.get('/gettasks');
+  Future<List<GetAllTaskResponse>> getTasks();
 
-    if (response.data is Map<String, dynamic> && response.data.containsKey('tasks')) {
-      return List<dynamic>.from(response.data['tasks']); // ✅ Extract only relevant tasks
-    }
+  Future<void> createTask(String title, String description,
+      String? startDate, String? endDate, List<int> userIds);
 
-    throw Exception("Unexpected API response format");
-  }
+  Future<void> updateTask(int taskId, String title, String description,
+      String? deadline, String? startDate, String? endDate, List<int> userIds);
 
+  Future<void> deleteTask(int taskId);
 
-  Future<void> createTask(String title, String description, String? deadline,
-      String? startDate,
-      String?endDate,
-      List<int> userIds) async {
-    await _apiClient.post('/tasks', data: {
-      'title': title,
-      'description': description,
-      'deadline': deadline,
-      'start_date': startDate,
-      'end_date': endDate,
-      'user_ids':userIds
+  Future<void> assignTask(int taskId, List<int> userIds);
 
-    });
-  }
+  Future<void> markTaskComplete(int taskId);
 
-  Future<void> updateTask(int taskId,String title, String description, String? deadline,
-      String? startDate,
-      String?endDate,
-      List<int> userIds) async {
-    await _apiClient.post('/tasks/$taskId', data: {
-      'title': title,
-      'description': description,
-      'deadline': deadline,
-      'start_date': startDate,
-      'end_date': endDate,
-      'user_ids':userIds
-    });
-  }
+  Future<void> startEditingTask(int taskId, String username);
 
-  Future<void> deleteTask(int taskId) async {
-    await _apiClient.delete('/tasks/$taskId');
-  }
+  Stream<String> listenToWebSocket();
 
-  Future<void> assignTask(int taskId, List<int> userIds) async {
-    await _apiClient.post('/tasks/$taskId/assign', data: {'user_ids': userIds});
-  }
-
-  Future<void> markTaskComplete(int taskId) async {
-    await _apiClient.post('/tasks/$taskId/complete');
-  }
-  Future<void> startEditingTask(int taskId, String username) async {
-    await _apiClient.post('/tasks/$taskId/editing', data: {
-      'username': username,
-    });
-  }
+  Future<List<GetUsersResponse>> getUsers();
 
 
-
+  Future<void> updateFirebaseCloudMessaging(String fcmID);
 }
