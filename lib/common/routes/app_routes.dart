@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:smart_mobile_app/new_presentation/presentation/screens/dashboard/home_page.dart';
+import 'package:smart_mobile_app/new_presentation/presentation/screens/settings/user_settings.dart';
 
 import '../../new_presentation/presentation/screens/login_screen/login_page.dart';
 import '../../new_presentation/presentation/screens/onboading_screen/onboarding_page.dart';
@@ -31,6 +33,10 @@ class RouteGenerator {
         return _slideRoute(SignupPage(), routeSettings);
       case SmartTaskAppRoutes.addTask:
         return _slideRoute(AddTask(), routeSettings);
+      case SmartTaskAppRoutes.homePage:
+        return _slideRoute(HomePage(), routeSettings);
+      case SmartTaskAppRoutes.settingsPage:
+        return _slideRoute(UserInfoScreen(), routeSettings);
       default:
         return _fadeRoute(const LoginPage(), routeSettings);
     }

@@ -28,7 +28,7 @@ class User {
   final int id;
   final String name;
   final String email;
-  final Preferences preferences;
+  final Preferences? preferences;
 
   User({
     required this.id,
@@ -48,7 +48,7 @@ class User {
     "id": id,
     "name": name,
     "email": email,
-    "preferences": preferences.toJson(),
+    "preferences": preferences?.toJson(),
   };
 }
 

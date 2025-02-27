@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_mobile_app/presentation/providers/authentication_token_provider.dart';
 import 'package:smart_mobile_app/presentation/providers/tasks_provider.dart';
+import 'package:smart_mobile_app/presentation/providers/user_info_provider.dart';
 import 'package:smart_mobile_app/presentation/providers/user_provider.dart';
 import 'common/routes/app_routes.dart';
 import 'common/utils/functions/utils_functions.dart';
@@ -37,6 +38,7 @@ void main() async {
           ),
         ),
         ChangeNotifierProvider(create: (_) => getIt<UserProvider>()),
+        ChangeNotifierProvider(create: (_)=>  getIt<UserInfoProvider>()),
       ],
       child: MyApp(),
     ),

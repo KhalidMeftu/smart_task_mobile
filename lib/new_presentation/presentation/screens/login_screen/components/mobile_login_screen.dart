@@ -7,6 +7,7 @@ import 'package:smart_mobile_app/dependency_injection.dart';
 import 'package:smart_mobile_app/new_presentation/presentation/common_widgets/custom_button/custom_button.dart';
 import 'package:smart_mobile_app/new_presentation/presentation/common_widgets/custom_image_viewer/custom_image_view.dart';
 import 'package:smart_mobile_app/new_presentation/presentation/common_widgets/custom_textfield/custom_text_field.dart';
+import 'package:smart_mobile_app/new_presentation/presentation/screens/dashboard/home_page.dart';
 import 'package:smart_mobile_app/presentation/providers/auth_provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -36,7 +37,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (success) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.pushReplacementNamed(context, SmartTaskAppRoutes.homePage);
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()),
+            (Route<dynamic> route) => false,
+          );
         });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -55,14 +60,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: SmartTaskPaddings.s16),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          const SizedBox(height: 50),
-          CustomImageView(
+          const SizedBox(height: 70),
+          CustomImageView( height: 200, width: 300,
               imagePath: 'assets/images/login_signup_header_image.png'),
+
           Center(
             child: Text(
               "Smart Task Management",
