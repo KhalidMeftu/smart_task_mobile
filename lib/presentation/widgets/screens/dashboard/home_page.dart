@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: SmartTaskAppColors.whiteColor,
-      appBar:  CustomAppBar(),
+      appBar:  CustomAppBar(isSettingsPage: false,),
       body: Column(
         children: [
           SizedBox(

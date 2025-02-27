@@ -7,7 +7,8 @@ import 'package:smart_mobile_app/presentation/providers/user_info_provider.dart'
 
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBar({super.key});
+   final bool isSettingsPage;
+  const CustomAppBar({super.key, required this.isSettingsPage});
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -32,7 +33,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         },
       ),
       actions: [
-        IconButton(
+        isSettingsPage?Container():IconButton(
           icon: Icon(Icons.settings),
           onPressed: () {
             Navigator.pushNamed(context, SmartTaskAppRoutes.settingsPage);

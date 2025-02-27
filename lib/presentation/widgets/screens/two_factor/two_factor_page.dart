@@ -64,7 +64,7 @@ class _TwoFactorVerificationScreenState extends State<TwoFactorVerificationScree
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: SmartTaskAppColors.whiteColor,
-      appBar:  CustomAppBar(),
+      appBar:  CustomAppBar(isSettingsPage: false,),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

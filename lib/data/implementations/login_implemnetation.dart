@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:smart_mobile_app/core/network/api_client.dart';
 import 'package:smart_mobile_app/core/network/websocket_service.dart';
 import 'package:smart_mobile_app/domain/entity/responses/prefs.dart';
@@ -55,4 +57,22 @@ class AuthenticationImpl implements AuthRepository {
       print("Failed to send FCM token: $e");
     }
   }
+
+
+  @override
+  Future<Response> logoutUser() async {
+    try {
+      return await apiService.post('/logout');
+    } catch (e) {
+      if (kDebugMode) {
+        print("Failed to send FCM token: $e");
+      }
+      return Response(
+        statusCode: 500,
+        requestOptions: RequestOptions(path: '/logout'),
+      );
+    }
+  }
+
+
 }

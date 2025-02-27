@@ -8,6 +8,7 @@ import 'package:smart_mobile_app/presentation/providers/theme_provider.dart';
 import 'package:smart_mobile_app/presentation/providers/user_info_provider.dart';
 import 'package:smart_mobile_app/presentation/widgets/common_widgets/common_appbar/smart_task_appbar.dart';
 import 'package:smart_mobile_app/presentation/widgets/common_widgets/custom_button/custom_button.dart';
+import 'package:smart_mobile_app/presentation/widgets/common_widgets/logout_button.dart';
 import 'package:smart_mobile_app/presentation/widgets/screens/two_factor/enable_two_fa_screen.dart';
 
 
@@ -18,7 +19,7 @@ class UserInfoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: SmartTaskAppColors.whiteColor,
-      appBar:  CustomAppBar(),
+      appBar:  CustomAppBar(isSettingsPage: true),
       body: Consumer<UserInfoProvider>(
         builder: (context, provider, child) {
           if (provider.state == UserInfoState.loading) {
@@ -54,7 +55,6 @@ class __UserInfoFormState extends State<_UserInfoForm> {
   late String _themeMode;
   late int _notifications;
 
-  // Remove _initialTwoFactorAuth from the "has changes" check:
   late String _initialThemeMode;
   late int _initialNotifications;
 
@@ -70,7 +70,6 @@ class __UserInfoFormState extends State<_UserInfoForm> {
     _themeMode = widget.user.user.preferences!.themeMode;
     _notifications = widget.user.user.preferences!.notifications;
 
-    // Store initial values for theme and notifications only:
     _initialThemeMode = _themeMode;
     _initialNotifications = _notifications;
   }
@@ -81,7 +80,6 @@ class __UserInfoFormState extends State<_UserInfoForm> {
     Provider.of<UserInfoProvider>(context, listen: false);
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
-    // Update dark mode on post frame callback
     WidgetsBinding.instance.addPostFrameCallback((_) {
       themeProvider.setDarkMode(_themeMode == 'dark');
     });
@@ -90,7 +88,6 @@ class __UserInfoFormState extends State<_UserInfoForm> {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          // Two-Factor Authentication Switch
           SwitchListTile(
             title: const Text('Two-Factor Authentication'),
             value: _twoFactorAuth == 1,
@@ -109,7 +106,6 @@ class __UserInfoFormState extends State<_UserInfoForm> {
           ),
           CustomDivider(),
 
-          // Notifications Switch (this one triggers navigation)
           SwitchListTile(
             title: const Text('Notifications'),
             value: _notifications == 1,
@@ -159,7 +155,11 @@ class __UserInfoFormState extends State<_UserInfoForm> {
           ),
           CustomDivider(),
 
-          // Show the Update button only if theme or notifications have changed.
+          Align(
+            alignment: Alignment.centerRight,
+              child: LogoutButton()),
+          CustomDivider(),
+
           if (_hasChanges)
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -174,7 +174,6 @@ class __UserInfoFormState extends State<_UserInfoForm> {
     );
   }
 
-  // This method updates theme and notifications if they have changed.
   void updateUserInfo(UserInfoProvider userInfoProvider) async {
     await userInfoProvider.updateUserInfo(
       _twoFactorAuth == 1,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:smart_mobile_app/common/utils/enums/smart_app_enums.dart';
 import 'package:smart_mobile_app/data/implementations/login_implemnetation.dart';
 import 'package:smart_mobile_app/data/usecase/login_usecase.dart';
 import 'package:smart_mobile_app/dependency_injection.dart';
@@ -12,7 +13,12 @@ class AuthProvider with ChangeNotifier {
   bool _isLoading = false;
   String? _error;
 
+  LogoutState _logoutState = LogoutState.idle;
+  String? _logoutError;
   AuthProvider(this._authRepository);
+
+  LogoutState get logoutState => _logoutState;
+  String? get logoutError => _logoutError;
 
   String? get token => _token;
   bool get isLoading => _isLoading;
@@ -60,6 +66,25 @@ class AuthProvider with ChangeNotifier {
     } catch (e) {
       print("Failed to send FCM token: $e");
     }
+  }
+  Future<void> logoutUser() async {
+    _logoutState = LogoutState.loading;
+    notifyListeners();
+
+    try {
+      final response = await _authRepository.logoutUser();
+      if (response.statusCode == 200) {
+        _logoutState = LogoutState.success;
+      } else {
+        _logoutState = LogoutState.error;
+        _error = "Logout failed with status code: ${response.statusCode}";
+      }
+    } catch (e) {
+      _logoutState = LogoutState.error;
+      _error = e.toString();
+    }
+
+    notifyListeners();
   }
 
 
