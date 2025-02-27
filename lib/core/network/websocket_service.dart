@@ -115,13 +115,13 @@ class WebSocketService {
     print(_channel == null);
 
     if (_channel == null) {
-      return const Stream.empty(); // Return an empty stream if not connected
+      return const Stream.empty();
     }
 
     return _channel!.stream.map((message) {
       print(message.toString());
       //  try {
-      final jsonData = jsonDecode(message); // Parse JSON safely
+      final jsonData = jsonDecode(message);
 
       if (jsonData is Map<String, dynamic> && jsonData.containsKey('tasks')) {
         return GetAllTaskResponse.fromJson(
