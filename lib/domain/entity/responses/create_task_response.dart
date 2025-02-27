@@ -152,3 +152,21 @@ class Pivot {
     "user_id": userId,
   };
 }
+
+class TaskUsersMock {
+  final String name;
+
+
+  TaskUsersMock({
+    required this.name,
+  });
+
+  factory TaskUsersMock.fromJson(Map<String, dynamic> json) => TaskUsersMock(
+    name: json["name"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "name": name,
+  };
+}
+

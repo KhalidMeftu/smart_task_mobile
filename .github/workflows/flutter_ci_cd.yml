@@ -1,0 +1,73 @@
+name: SMART TASK CI/CD
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - '**/*.md'
+
+  push:
+    branches:
+      - ws-task-test
+
+jobs:
+  test:
+    name: Run Flutter Tests
+    runs-on: ubuntu-latest
+
+    if: github.base_ref == 'main' && github.head_ref == 'dev'
+    # Only allow PRs from dev to main
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.27.1"
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run tests
+        run: flutter test
+
+  build_apk:
+    name: Build and Save APK to QA
+    needs: test
+    if: github.ref == 'refs/heads/dev'  # Only trigger build when pushing to dev branch
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.27.1"
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --debug
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-apk
+          path: build/app/outputs/flutter-apk/app-debug.apk
+
+      - name: Push APK to QA Branch
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git checkout -b QA
+          mkdir -p releases
+          mv build/app/outputs/flutter-apk/app-debug.apk debug/
+          git add releases/app-debug.apk
+          git commit -m "Automated APK build from dev branch"
+          git push origin QA --force

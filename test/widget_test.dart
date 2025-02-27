@@ -1,30 +1,42 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:smart_mobile_app/main.dart';
+import 'package:smart_mobile_app/common/utils/functions/utils_functions.dart';
+import 'package:smart_mobile_app/domain/entity/responses/create_task_response.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  group('Utility Functions Tests', () {
+    test('formatDate should format date string correctly', () {
+      String dateString = "2025-02-27T12:34:56Z";
+      String formattedDate = formatDate(dateString);
+      expect(formattedDate, equals("27-02-2025"));
+    });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    test('formatAddTaskDate should format DateTime correctly', () {
+      DateTime dateTime = DateTime(2025, 02, 27, 12, 34, 56);
+      String formattedDate = formatAddTaskDate(dateTime);
+      expect(formattedDate, equals("2025-02-27 12:34:56"));
+    });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    test('getUserInitials should return initials for a list of users', () {
+      List<TaskUsersMock> users = [
+        TaskUsersMock(name: "John Doe"),
+        TaskUsersMock(name: "Jane Smith"),
+      ];
+      List<String> initials = getUserInitialsTest(users);
+      expect(initials, equals(["JD", "JS"]));
+    });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    test('getUserNameInitials should return initials for a single user', () {
+      String name = "John Doe";
+      String initials = getUserNameInitials(name);
+      expect(initials, equals("JD"));
+    });
+
+    test('capitalizeEachWord should capitalize each word in a string', () {
+      String text = "hello world";
+      String capitalizedText = capitalizeEachWord(text);
+      expect(capitalizedText, equals("Hello World"));
+    });
+
+
   });
 }

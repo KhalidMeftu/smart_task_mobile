@@ -22,7 +22,13 @@ List<String> getUserInitials(List<TaskUsers> users) {
     return nameParts.map((part) => part[0]).join().toUpperCase();
   }).toList();
 }
-
+//
+List<String> getUserInitialsTest(List<TaskUsersMock> users) {
+  return users.map((user) {
+    List<String> nameParts = user.name.split(' ');
+    return nameParts.map((part) => part[0]).join().toUpperCase();
+  }).toList();
+}
 String getUserNameInitials(String name) {
   List<String> names = name.split(' ');
   String initials = "";
