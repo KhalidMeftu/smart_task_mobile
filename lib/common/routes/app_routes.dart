@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:smart_mobile_app/new_presentation/presentation/screens/dashboard/home_page.dart';
-import 'package:smart_mobile_app/new_presentation/presentation/screens/settings/user_settings.dart';
-
-import '../../new_presentation/presentation/screens/login_screen/login_page.dart';
-import '../../new_presentation/presentation/screens/onboading_screen/onboarding_page.dart';
-import '../../new_presentation/presentation/screens/register_screen/signup_page.dart';
-import '../../new_presentation/presentation/screens/tasks/addtask/add_task.dart';
-
-
+import 'package:smart_mobile_app/presentation/widgets/screens/dashboard/home_page.dart';
+import 'package:smart_mobile_app/presentation/widgets/screens/login_screen/login_page.dart';
+import 'package:smart_mobile_app/presentation/widgets/screens/onboading_screen/onboarding_page.dart';
+import 'package:smart_mobile_app/presentation/widgets/screens/register_screen/signup_page.dart';
+import 'package:smart_mobile_app/presentation/widgets/screens/settings/user_settings.dart';
+import 'package:smart_mobile_app/presentation/widgets/screens/tasks/addtask/add_task.dart';
 
 class SmartTaskAppRoutes {
   static const String onBoarding = '/onboardingRoute';
@@ -21,7 +18,7 @@ class SmartTaskAppRoutes {
 
 class RouteGenerator {
   static final GlobalKey<NavigatorState> navigatorKey =
-  GlobalKey<NavigatorState>();
+      GlobalKey<NavigatorState>();
 
   static Route<dynamic> getRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
@@ -46,13 +43,13 @@ class RouteGenerator {
   static Route<dynamic> unDefinedRoute() {
     return MaterialPageRoute(
         builder: (_) => Scaffold(
-          appBar: AppBar(
-            title: const Text("Error"),
-          ),
-          body: const Center(
-            child: Text("No Route"),
-          ),
-        ));
+              appBar: AppBar(
+                title: const Text("Error"),
+              ),
+              body: const Center(
+                child: Text("No Route"),
+              ),
+            ));
   }
 
   static PageRouteBuilder _fadeRoute(Widget page, RouteSettings settings) {
@@ -81,4 +78,3 @@ class RouteGenerator {
     );
   }
 }
-

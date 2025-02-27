@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_mobile_app/core/network/websocket_service.dart';
 import 'package:smart_mobile_app/dependency_injection.dart';
-import 'package:smart_mobile_app/new_presentation/presentation/screens/onboading_screen/onboarding_page.dart';
 import 'package:smart_mobile_app/presentation/providers/authentication_token_provider.dart';
-import '../../../presentation/screens/home_screen.dart';
 import 'dashboard/home_page.dart';
 import 'login_screen/login_page.dart';
+import 'onboading_screen/onboarding_page.dart';
 
 class AuthWrapper extends StatelessWidget {
   const AuthWrapper({super.key});

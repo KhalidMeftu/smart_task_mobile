@@ -3,13 +3,15 @@ import 'package:smart_mobile_app/common/app_ui_configs/app_colors/app_colors.dar
 import 'package:smart_mobile_app/common/app_ui_configs/app_fonts/app_fonts.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_paddings/app_paddings.dart';
 import 'package:smart_mobile_app/common/routes/app_routes.dart';
+import 'package:smart_mobile_app/core/network/api_client.dart';
 import 'package:smart_mobile_app/core/network/websocket_service.dart';
 import 'package:smart_mobile_app/dependency_injection.dart';
-import 'package:smart_mobile_app/new_presentation/presentation/common_widgets/custom_button/custom_button.dart';
-import 'package:smart_mobile_app/new_presentation/presentation/common_widgets/custom_image_viewer/custom_image_view.dart';
-import 'package:smart_mobile_app/new_presentation/presentation/common_widgets/custom_textfield/custom_text_field.dart';
-import 'package:smart_mobile_app/new_presentation/presentation/screens/dashboard/home_page.dart';
 import 'package:smart_mobile_app/presentation/providers/auth_provider.dart';
+import 'package:smart_mobile_app/presentation/widgets/common_widgets/custom_button/custom_button.dart';
+import 'package:smart_mobile_app/presentation/widgets/common_widgets/custom_image_viewer/custom_image_view.dart';
+import 'package:smart_mobile_app/presentation/widgets/common_widgets/custom_textfield/custom_text_field.dart';
+import 'package:smart_mobile_app/presentation/widgets/screens/dashboard/home_page.dart';
+import 'package:smart_mobile_app/presentation/widgets/screens/two_factor/two_factor_page.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -29,29 +31,63 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() => isLoading = true);
 
       final authProvider = getIt<AuthProvider>();
-      bool success = await authProvider.login(
+      final result = await authProvider.login(
         emailController.text.trim(),
         passwordController.text.trim(),
       );
 
       setState(() => isLoading = false);
 
-      if (success) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          final WebSocketService _webSocketService = getIt<WebSocketService>();
-          _webSocketService.connect();
-          Navigator.pushAndRemoveUntil(
+      if (result != null) {
+        if (result.startsWith('2FA_REQUIRED:')) {
+          final userId = result.split(':')[1];
+          Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => HomePage()),
-            (Route<dynamic> route) => false,
+            MaterialPageRoute(builder: (context) => TwoFactorVerificationScreen(userId: userId)),
           );
-        });
+        } else {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            final WebSocketService _webSocketService = getIt<WebSocketService>();
+            _webSocketService.connect();
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+                  (Route<dynamic> route) => false,
+            );
+          });
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Invalid email or password")),
         );
       }
     }
+  }
+
+
+  void loginWithGoogle() async {
+    setState(() => isLoading = true);
+
+    final apiService = getIt<ApiClient>();
+
+    try {
+      final response = await apiService.post('/loginWithGoogle');
+      print("Google Login response.");
+      print(response.toString());
+      if (response.statusCode == 200) {
+
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Invalid 2FA code")),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: ${e.toString()}")),
+      );
+    }
+
+    setState(() => isLoading = false);
   }
 
   @override
@@ -132,7 +168,27 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     )
                   ],
-                )
+                ),
+                SizedBox(height: 100,),
+                /*Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        loginWithGoogle();
+                      },
+                      child: Text(
+                        "Login with Google",
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: SmartTaskAppColors.primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
+                  ],
+                )*/
+
               ],
             ),
           ),

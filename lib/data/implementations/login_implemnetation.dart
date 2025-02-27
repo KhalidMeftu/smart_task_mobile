@@ -1,6 +1,5 @@
 import 'package:smart_mobile_app/core/network/api_client.dart';
 import 'package:smart_mobile_app/core/network/websocket_service.dart';
-import 'package:smart_mobile_app/domain/entity/responses/login_response.dart';
 import 'package:smart_mobile_app/domain/entity/responses/prefs.dart';
 import 'package:smart_mobile_app/domain/repository/AuthRepositories.dart';
 import 'package:smart_mobile_app/presentation/providers/user_info_provider.dart';
@@ -15,13 +14,25 @@ class AuthenticationImpl implements AuthRepository {
   @override
   Future<String> login(String email, String password) async {
     final response = await apiService.post('/login', data: {'email': email, 'password': password});
-    final token = response.data['token'];
-    final loginData = PreferencesData.fromJson(response.data);
-     await userProvider.saveUserInfos(loginData);
-     await apiService.setAuthToken(token);
-     await apiService.setUserID(loginData.user.id.toString());
-    return token;
+
+    if (response.data.containsKey('token')) {
+      /// no 2fa
+      final token = response.data['token'];
+      final loginData = PreferencesData.fromJson(response.data);
+
+      await userProvider.saveUserInfos(loginData);
+      await apiService.setAuthToken(token);
+      await apiService.setUserID(loginData.user.id.toString());
+
+      return token;
+    } else if (response.data['message'] == '2FA required') {
+        /// twofa
+      return '2FA_REQUIRED:${response.data['user_id']}';
+    }
+
+    throw Exception('Invalid login response');
   }
+
 
   @override
   Future<String> register(String name, String email, String password) async {

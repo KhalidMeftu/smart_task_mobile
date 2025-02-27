@@ -49,6 +49,7 @@ dependencies:
   intl:
   flutter_svg: ^2.0.17  #using this for parsing svg images
   sembast:
+  flutter_dialogs:
 
 
 dev_dependencies:

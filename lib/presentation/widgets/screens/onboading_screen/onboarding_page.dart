@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_colors/app_colors.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_fonts/app_fonts.dart';
-import 'package:smart_mobile_app/common/routes/app_routes.dart';
-import 'package:smart_mobile_app/new_presentation/presentation/screens/login_screen/login_page.dart';
+import 'package:smart_mobile_app/presentation/widgets/screens/login_screen/login_page.dart';
 import 'component/onboarding_contents.dart';
 
 class OnboardingScreen extends StatefulWidget {

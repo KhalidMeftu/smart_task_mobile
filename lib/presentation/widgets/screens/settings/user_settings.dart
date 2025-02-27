@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_colors/app_colors.dart';
+import 'package:smart_mobile_app/common/app_ui_configs/custom_uis/custom_divider.dart';
 import 'package:smart_mobile_app/common/utils/enums/smart_app_enums.dart';
 import 'package:smart_mobile_app/domain/entity/responses/prefs.dart';
-import 'package:smart_mobile_app/new_presentation/presentation/common_widgets/common_appbar/smart_task_appbar.dart';
-import 'package:smart_mobile_app/new_presentation/presentation/common_widgets/custom_button/custom_button.dart';
 import 'package:smart_mobile_app/presentation/providers/theme_provider.dart';
 import 'package:smart_mobile_app/presentation/providers/user_info_provider.dart';
+import 'package:smart_mobile_app/presentation/widgets/common_widgets/common_appbar/smart_task_appbar.dart';
+import 'package:smart_mobile_app/presentation/widgets/common_widgets/custom_button/custom_button.dart';
+import 'package:smart_mobile_app/presentation/widgets/screens/two_factor/enable_two_fa_screen.dart';
 
 
 class UserInfoScreen extends StatelessWidget {
@@ -52,13 +54,13 @@ class __UserInfoFormState extends State<_UserInfoForm> {
   late String _themeMode;
   late int _notifications;
 
-  late int _initialTwoFactorAuth;
+  // Remove _initialTwoFactorAuth from the "has changes" check:
   late String _initialThemeMode;
   late int _initialNotifications;
 
+  // Only theme and notifications now determine _hasChanges:
   bool get _hasChanges =>
-      _twoFactorAuth != _initialTwoFactorAuth ||
-          _themeMode != _initialThemeMode ||
+      _themeMode != _initialThemeMode ||
           _notifications != _initialNotifications;
 
   @override
@@ -68,49 +70,67 @@ class __UserInfoFormState extends State<_UserInfoForm> {
     _themeMode = widget.user.user.preferences!.themeMode;
     _notifications = widget.user.user.preferences!.notifications;
 
-    // Store initial values to compare later
-    _initialTwoFactorAuth = _twoFactorAuth;
+    // Store initial values for theme and notifications only:
     _initialThemeMode = _themeMode;
     _initialNotifications = _notifications;
   }
 
   @override
   Widget build(BuildContext context) {
-    final userInfoProvider = Provider.of<UserInfoProvider>(context, listen: false);
+    final userInfoProvider =
+    Provider.of<UserInfoProvider>(context, listen: false);
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
+    // Update dark mode on post frame callback
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_themeMode == 'dark') {
-        themeProvider.setDarkMode(true);
-      } else {
-        themeProvider.setDarkMode(false);
-      }
+      themeProvider.setDarkMode(_themeMode == 'dark');
     });
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
+          // Two-Factor Authentication Switch
           SwitchListTile(
-            title: Text('Two-Factor Authentication'),
+            title: const Text('Two-Factor Authentication'),
             value: _twoFactorAuth == 1,
-            onChanged: (value) {
+            onChanged: (value) async {
               setState(() {
                 _twoFactorAuth = value ? 1 : 0;
               });
+              // Immediately update 2FA without needing the Update button:
+              await userInfoProvider.updateUserInfo(
+                _twoFactorAuth == 1,
+                _themeMode,
+                _notifications == 1,
+              );
+              await userInfoProvider.fetchUserInfo();
             },
           ),
+          CustomDivider(),
 
+          // Notifications Switch (this one triggers navigation)
           SwitchListTile(
-            title: Text('Notifications'),
+            title: const Text('Notifications'),
             value: _notifications == 1,
             onChanged: (value) {
               setState(() {
                 _notifications = value ? 1 : 0;
+                print("Notification Value Updated: $_notifications");
               });
+              if (_notifications == 1) {
+                print("Navigating to Enable2FAScreen");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const Enable2FAScreen()),
+                );
+              }
             },
           ),
+          CustomDivider(),
 
+          // Dark mode toggle
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0, right: 20),
             child: Align(
@@ -121,7 +141,8 @@ class __UserInfoFormState extends State<_UserInfoForm> {
                     onTap: () {
                       darkModeProvider.toggleDarkMode();
                       setState(() {
-                        _themeMode = darkModeProvider.isDarkMode ? 'dark' : 'light';
+                        _themeMode =
+                        darkModeProvider.isDarkMode ? 'dark' : 'light';
                       });
                     },
                     child: Icon(
@@ -136,8 +157,10 @@ class __UserInfoFormState extends State<_UserInfoForm> {
               ),
             ),
           ),
+          CustomDivider(),
 
-          if (_hasChanges) // Show button only when there are changes
+          // Show the Update button only if theme or notifications have changed.
+          if (_hasChanges)
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: CustomButton(
@@ -151,20 +174,19 @@ class __UserInfoFormState extends State<_UserInfoForm> {
     );
   }
 
-  void updateUserInfo(UserInfoProvider userInfoProvider) {
-    userInfoProvider.updateUserInfo(
-      _twoFactorAuth == 1 ? true : false,
+  // This method updates theme and notifications if they have changed.
+  void updateUserInfo(UserInfoProvider userInfoProvider) async {
+    await userInfoProvider.updateUserInfo(
+      _twoFactorAuth == 1,
       _themeMode,
-      _notifications == 1 ? true : false,
+      _notifications == 1,
     );
-    userInfoProvider.fetchUserInfo();
-
-    // Reset initial values after update
+    await userInfoProvider.fetchUserInfo();
     setState(() {
-      _initialTwoFactorAuth = _twoFactorAuth;
       _initialThemeMode = _themeMode;
       _initialNotifications = _notifications;
     });
   }
 }
+
 

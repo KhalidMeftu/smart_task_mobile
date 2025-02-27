@@ -4,10 +4,10 @@ import 'package:smart_mobile_app/common/app_ui_configs/app_fonts/app_fonts.dart'
 import 'package:smart_mobile_app/common/app_ui_configs/app_paddings/app_paddings.dart';
 import 'package:smart_mobile_app/common/routes/app_routes.dart';
 import 'package:smart_mobile_app/dependency_injection.dart';
-import 'package:smart_mobile_app/new_presentation/presentation/common_widgets/custom_button/custom_button.dart';
-import 'package:smart_mobile_app/new_presentation/presentation/common_widgets/custom_image_viewer/custom_image_view.dart';
-import 'package:smart_mobile_app/new_presentation/presentation/common_widgets/custom_textfield/custom_text_field.dart';
 import 'package:smart_mobile_app/presentation/providers/auth_provider.dart';
+import 'package:smart_mobile_app/presentation/widgets/common_widgets/custom_button/custom_button.dart';
+import 'package:smart_mobile_app/presentation/widgets/common_widgets/custom_image_viewer/custom_image_view.dart';
+import 'package:smart_mobile_app/presentation/widgets/common_widgets/custom_textfield/custom_text_field.dart';
 
 
 class SignUpScreen extends StatefulWidget {

@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_colors/app_colors.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_fonts/app_fonts.dart';
+import 'package:smart_mobile_app/common/app_ui_configs/custom_uis/custom_divider.dart';
 import 'package:smart_mobile_app/common/utils/enums/smart_app_enums.dart';
 import 'package:smart_mobile_app/common/utils/functions/utils_functions.dart';
 import 'package:smart_mobile_app/dependency_injection.dart';
-import 'package:smart_mobile_app/new_presentation/presentation/common_widgets/common_text/common_text.dart';
-import 'package:smart_mobile_app/new_presentation/presentation/common_widgets/custom_textfield/tasks_text_field.dart';
-import 'package:smart_mobile_app/new_presentation/presentation/common_widgets/divider/divider_line.dart';
 import 'package:smart_mobile_app/presentation/providers/tasks_provider.dart';
 import 'package:smart_mobile_app/presentation/providers/user_provider.dart';
+import 'package:smart_mobile_app/presentation/widgets/common_widgets/common_text/common_text.dart';
+import 'package:smart_mobile_app/presentation/widgets/common_widgets/custom_button/custom_button.dart';
+import 'package:smart_mobile_app/presentation/widgets/common_widgets/custom_textfield/tasks_text_field.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
-import '../../../common_widgets/custom_button/custom_button.dart';
 
 class AddTask extends StatefulWidget {
   const AddTask({super.key});

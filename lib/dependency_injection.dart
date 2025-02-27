@@ -2,10 +2,8 @@ import 'package:get_it/get_it.dart';
 import 'package:smart_mobile_app/data/usecase/task_usecase.dart';
 import 'package:smart_mobile_app/presentation/providers/auth_provider.dart';
 import 'package:smart_mobile_app/presentation/providers/authentication_token_provider.dart';
-import 'package:smart_mobile_app/presentation/providers/tasks_provider.dart';
 import 'package:smart_mobile_app/presentation/providers/user_info_provider.dart';
 import 'package:smart_mobile_app/presentation/providers/user_provider.dart';
-
 import 'core/network/api_client.dart';
 import 'core/network/websocket_service.dart';
 import 'core/services/app_local_storage services.dart';
@@ -16,7 +14,6 @@ import 'data/usecase/login_usecase.dart';
 import 'data/usecase/websockets_usecase.dart';
 import 'domain/repository/AuthRepositories.dart';
 import 'domain/repository/task_repository.dart';
-import 'domain/repository/user_data_repository.dart';
 import 'local_database/database/appdatabase.dart';
 
 final getIt = GetIt.instance;
