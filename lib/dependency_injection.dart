@@ -30,7 +30,7 @@ Future<void> setupLocator() async {
   var instance = await SmartLocalStorageServices.getinstance();
   getIt.registerLazySingleton<SmartLocalStorageServices>(() => instance);
   getIt.registerLazySingleton<AuthTokenProvider>(() => AuthTokenProvider());
-  getIt.registerLazySingleton<UserInformationImplementation>(() => UserInformationImplementation());
+  getIt.registerLazySingleton<UserInformationImplementation>(() => UserInformationImplementation(getIt<ApiClient>()));
   getIt.registerFactory<UserInfoProvider>(
           () => UserInfoProvider(userRepository: getIt<UserInformationImplementation>()));
   getIt.registerLazySingleton<AuthRepository>(() => AuthenticationImpl(

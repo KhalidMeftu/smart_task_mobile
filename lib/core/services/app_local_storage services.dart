@@ -45,6 +45,10 @@ class SmartLocalStorageServices {
     }
   }
 
+  Future<void> setFirbaseToken(String firebaseToken) async {
+    _saveData('firebaseToken', firebaseToken);
+  }
+
   Future<void> saveTheme(bool theme) async {
     final success = await _saveData('theme', theme);
     if (success) {

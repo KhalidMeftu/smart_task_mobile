@@ -45,7 +45,9 @@ class TaskProvider with ChangeNotifier {
       _tasks.addAll(responses.expand((response) => response.tasks));
       notifyListeners();
     } catch (e) {
-      print("Error fetching tasks: $e");
+      if (kDebugMode) {
+        print("Error fetching tasks: $e");
+      }
     }
   }
 

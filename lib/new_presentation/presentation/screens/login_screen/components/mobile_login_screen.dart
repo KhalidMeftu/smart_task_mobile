@@ -3,6 +3,7 @@ import 'package:smart_mobile_app/common/app_ui_configs/app_colors/app_colors.dar
 import 'package:smart_mobile_app/common/app_ui_configs/app_fonts/app_fonts.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_paddings/app_paddings.dart';
 import 'package:smart_mobile_app/common/routes/app_routes.dart';
+import 'package:smart_mobile_app/core/network/websocket_service.dart';
 import 'package:smart_mobile_app/dependency_injection.dart';
 import 'package:smart_mobile_app/new_presentation/presentation/common_widgets/custom_button/custom_button.dart';
 import 'package:smart_mobile_app/new_presentation/presentation/common_widgets/custom_image_viewer/custom_image_view.dart';
@@ -37,6 +38,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (success) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
+          final WebSocketService _webSocketService = getIt<WebSocketService>();
+          _webSocketService.connect();
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => HomePage()),

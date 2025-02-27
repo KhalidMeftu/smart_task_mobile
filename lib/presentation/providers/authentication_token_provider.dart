@@ -27,6 +27,7 @@ class AuthTokenProvider with ChangeNotifier {
       print("Checking token");
     }
     _token = await _apiClient.getAuthToken();
+    print(_token);
     _isLoading = false;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       notifyListeners();
@@ -52,4 +53,5 @@ class AuthTokenProvider with ChangeNotifier {
       return false;
     }
   }
+
 }

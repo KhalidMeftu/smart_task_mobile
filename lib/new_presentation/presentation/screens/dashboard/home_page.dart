@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_colors/app_colors.dart';
 import 'package:smart_mobile_app/common/routes/app_routes.dart';
 import 'package:smart_mobile_app/common/utils/functions/utils_functions.dart';
+import 'package:smart_mobile_app/core/services/app_local_storage%20services.dart';
 import 'package:smart_mobile_app/dependency_injection.dart';
 import 'package:smart_mobile_app/new_presentation/presentation/common_widgets/common_appbar/smart_task_appbar.dart';
 import 'package:smart_mobile_app/new_presentation/presentation/common_widgets/display_tasks_ui.dart';
@@ -110,14 +111,36 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> getToken() async {
-    String? token = await getFcmToken();
-    if (kDebugMode) {
-      print("FCM Token: $token");
-    }
-    if (token != null) {
+    try {
+      final token = await getFcmToken();
+
+      if (token == null) {
+        if (kDebugMode)
+          print("FCM Token is null, skipping update.");
+        return;
+      }
+
+      if (kDebugMode)
+        print("FCM Token: $token");
+
+      final storageService = getIt<SmartLocalStorageServices>();
+      final storedFcmToken = await storageService.getData('firebaseToken');
+
+      if (token == storedFcmToken) {
+        if (kDebugMode)
+          print("FCM Token is already up to date, no API call needed.");
+        return;
+      }
+
+
       final authProvider = getIt<AuthProvider>();
-          authProvider.sendFcmToken(token);
-    } else {}
+      await authProvider.sendFcmToken(token);
+      await storageService.setFirbaseToken(token);
+
+      if (kDebugMode) print("FCM Token updated successfully.");
+    } catch (e) {
+      if (kDebugMode) print("Error fetching FCM Token: $e");
+    }
   }
 
 }

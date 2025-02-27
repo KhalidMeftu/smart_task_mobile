@@ -4,6 +4,8 @@ import 'package:smart_mobile_app/common/app_ui_configs/app_colors/app_colors.dar
 import 'package:smart_mobile_app/common/utils/enums/smart_app_enums.dart';
 import 'package:smart_mobile_app/domain/entity/responses/login_response.dart';
 import 'package:smart_mobile_app/new_presentation/presentation/common_widgets/common_appbar/smart_task_appbar.dart';
+import 'package:smart_mobile_app/new_presentation/presentation/common_widgets/custom_button/custom_button.dart';
+import 'package:smart_mobile_app/presentation/providers/theme_provider.dart';
 import 'package:smart_mobile_app/presentation/providers/user_info_provider.dart';
 
 
@@ -17,6 +19,8 @@ class UserInfoScreen extends StatelessWidget {
       appBar:  CustomAppBar(),
       body: Consumer<UserInfoProvider>(
         builder: (context, provider, child) {
+          print("User Info");
+          print(provider.user!.preferences!.notifications);
           if (provider.state == UserInfoState.loading) {
             return Center(child: CircularProgressIndicator());
           }
@@ -60,85 +64,83 @@ class __UserInfoFormState extends State<_UserInfoForm> {
 
   @override
   Widget build(BuildContext context) {
+    final userInfoProvider = Provider.of<UserInfoProvider>(context, listen: false);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_themeMode == 'dark') {
+        themeProvider.setDarkMode(true);
+      } else {
+        themeProvider.setDarkMode(false);
+      }
+    });
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
+        spacing: 10,
         children: [
-          // Two-Factor Authentication Toggle
           SwitchListTile(
             title: Text('Two-Factor Authentication'),
-            value: _twoFactorAuth == 1, // Convert to bool for Switch
+            value: _twoFactorAuth == 1,
             onChanged: (value) {
               setState(() {
-                _twoFactorAuth = value ? 1 : 0; // Convert back to int
+                _twoFactorAuth = value ? 1 : 0;
               });
             },
           ),
 
-          // Theme Mode Radio Buttons
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Theme Mode'),
-              RadioListTile<String>(
-                title: Text('Light'),
-                value: 'light',
-                groupValue: _themeMode,
-                onChanged: (value) {
-                  setState(() {
-                    _themeMode = value!;
-                  });
-                },
-              ),
-              RadioListTile<String>(
-                title: Text('Dark'),
-                value: 'dark',
-                groupValue: _themeMode,
-                onChanged: (value) {
-                  setState(() {
-                    _themeMode = value!;
-                  });
-                },
-              ),
-            ],
-          ),
 
           // Notifications Toggle
           SwitchListTile(
             title: Text('Notifications'),
-            value: _notifications == 1, // Convert to bool for Switch
+            value: _notifications == 1,
             onChanged: (value) {
               setState(() {
-                _notifications = value ? 1 : 0; // Convert back to int
+                _notifications = value ? 1 : 0;
               });
             },
           ),
 
-          // Update Button
-          ElevatedButton(
-            onPressed: () {
-              /*final updatedUser = User(
-                id: widget.user.id,
-                name: widget.user.name,
-                email: widget.user.email,
-                preferences: UserPreferences(
-                  id: widget.user.preferences.id,
-                  userId: widget.user.preferences.userId,
-                  twoFactorAuth: _twoFactorAuth,
-                  themeMode: _themeMode,
-                  notifications: _notifications,
-                  createdAt: widget.user.preferences.createdAt,
-                  updatedAt: widget.user.preferences.updatedAt,
-                ),
-              );*/
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0, right: 20),
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: Consumer<ThemeProvider>(
+                builder: (context, darkModeProvider, child) {
 
-              //context.read<UserInfoProvider>().saveUserInfo(updatedUser);
-            },
-            child: Text('Update'),
+                  return GestureDetector(
+                    onTap: () {
+                      darkModeProvider.toggleDarkMode();
+                    },
+                    child: Icon(
+                      darkModeProvider.isDarkMode
+                          ? Icons.wb_sunny
+                          : Icons.nights_stay,
+                      color: SmartTaskAppColors.primaryColor,
+                      size: 30,
+                    ),
+                  );
+                },
+              ),
+            ),
           ),
+
+
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CustomButton(
+              onTap:  () => updateUserInfo(userInfoProvider),
+              text: "Update",
+              bgColor: SmartTaskAppColors.buttonBackGroundColor,
+            ),
+          )
         ],
       ),
     );
+  }
+
+  updateUserInfo(UserInfoProvider userInfoProvider) {
+    userInfoProvider.updateUserInfo(_twoFactorAuth==1?true:false,_themeMode,_notifications==1?true:false);
+    userInfoProvider.fetchUserInfo();
   }
 }
 

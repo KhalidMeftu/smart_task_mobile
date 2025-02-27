@@ -34,6 +34,10 @@ class AuthWrapper extends StatelessWidget {
           _webSocketService.connect();
 
           return OnboardingScreen();
+        }  else if (authProvider.token != null) {
+          final WebSocketService _webSocketService = getIt<WebSocketService>();
+          _webSocketService.connect();
+          return HomePage();
         } else {
 
           return LoginPage();
