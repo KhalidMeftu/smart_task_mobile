@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:sembast/sembast.dart';
 import 'package:smart_mobile_app/core/network/api_client.dart';
 import 'package:smart_mobile_app/domain/entity/responses/login_response.dart';
+import 'package:smart_mobile_app/domain/entity/responses/prefs.dart';
 import 'package:smart_mobile_app/domain/repository/user_data_repository.dart';
 import 'package:smart_mobile_app/local_database/database/appdatabase.dart';
 
@@ -19,36 +20,30 @@ class UserInformationImplementation implements UserInfoRepository {
   Future<Database> get _db async => await _appDatabase.database;
 
   @override
-  Future<User?> getUserInfo() async {
-    try {
-      final records = await usersInformation.find(await _db);
-      if (records.isNotEmpty) {
-        return User.fromJson(records.first.value);
-      }
-      return null;
-    } catch (e) {
-      if (kDebugMode) {
-        print("Error fetching user info: $e");
-      }
-      return null;
+  Future<PreferencesData?> getUserInfo() async {
+    final records = await usersInformation.find(await _db);
+
+    print("Userinfo: $records");
+    if (records.isNotEmpty) {
+      return PreferencesData.fromJson(records.first.value);
     }
+
+    print("No user data found in local DB.");
+    return null;
   }
 
   @override
-  Future<bool> saveUserInfo(User userInfo) async {
-    print("Saving user info");
-    print( userInfo.id);
-    // Saving user info
-    // I/flutter (16229): 2
+  Future<bool> saveUserInfo(PreferencesData userInfo) async {
+
     try {
       final db = await _db;
 
       final existingRecords = await usersInformation.find(db,
-          finder: Finder(filter: Filter.equals('id', userInfo.id)));
+          finder: Finder(filter: Filter.equals('id', userInfo.user.id)));
 
       if (existingRecords.isNotEmpty) {
         await usersInformation.delete(db,
-            finder: Finder(filter: Filter.equals('id', userInfo.id)));
+            finder: Finder(filter: Filter.equals('id',userInfo.user.id)));
       }
       final userData = userInfo.toJson();
       await usersInformation.add(db, userData);
@@ -90,53 +85,40 @@ class UserInformationImplementation implements UserInfoRepository {
     String? themeMode,
     bool? notifications,
   }) async {
-    try {
-      final db = await _db;
-      final existingRecords = await usersInformation.find(db);
+    final db = await _db;
+    var existingRecords = await usersInformation.find(db);
+    if (existingRecords.isEmpty) {
+      await getUserInfo();
+      existingRecords = await usersInformation.find(db);
+    }
 
-      if (existingRecords.isEmpty) {
-        print("No user data found in local DB.");
-        return false;
-      }
-
-      final userData = existingRecords.first;
-      final user = User.fromJson(userData.value);
-      final prefs = user.preferences ?? Preferences(
-        id: 0,
-        userId: user.id,
-        twoFactorAuth: 0,
-        themeMode: 'light',
-        notifications: 1,
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-      );
-
-      final updatedPreferences = Preferences(
-        id: prefs.id,
-        userId: prefs.userId,
-        twoFactorAuth: twoFactorAuth != null ? (twoFactorAuth ? 1 : 0) : prefs.twoFactorAuth,
-        themeMode: themeMode ?? prefs.themeMode,
-        notifications: notifications != null ? (notifications ? 1 : 0) : prefs.notifications,
-        createdAt: prefs.createdAt,
-        updatedAt: DateTime.now(),
-      );
-
-      await usersInformation.update(
-        db,
-        {
-          ...user.toJson(),
-          "preferences": updatedPreferences.toJson(),
-        },
-      );
-
-      print("User preferences updated successfully!");
-      getUserInfo();
-      return true;
-    } catch (e) {
-      print("Error updating user preferences: $e");
+    if (existingRecords.isEmpty) {
       return false;
     }
+
+    final userData = existingRecords.first;
+    final userMap = (userData as RecordSnapshot).value as Map<String, dynamic>;
+    final user = userMap['user'];
+    final preferences = user['preferences'] ?? {};
+
+    final updatedPreferences = Preferences(
+      id: preferences['id'] ?? 0,
+      userId: preferences['user_id'] ?? 0,
+      twoFactorAuth: twoFactorAuth != null ? (twoFactorAuth ? 1 : 0) : (preferences['two_factor_auth'] ?? 0),
+      themeMode: themeMode ?? preferences['theme_mode'] ?? 'light',
+      notifications: notifications != null ? (notifications ? 1 : 0) : (preferences['notifications'] ?? 1),
+      createdAt: DateTime.tryParse(preferences['created_at'] ?? DateTime.now().toIso8601String()) ?? DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
+
+    await usersInformation.record(existingRecords.first.key).put(db, {"user": {...user, "preferences": updatedPreferences.toJson()}});
+
+
+    return true;
   }
 
 
 }
+
+
+

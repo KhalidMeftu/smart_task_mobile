@@ -1,7 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:smart_mobile_app/core/network/api_client.dart';
 import 'package:smart_mobile_app/core/network/websocket_service.dart';
 import 'package:smart_mobile_app/domain/entity/responses/login_response.dart';
+import 'package:smart_mobile_app/domain/entity/responses/prefs.dart';
 import 'package:smart_mobile_app/domain/repository/AuthRepositories.dart';
 import 'package:smart_mobile_app/presentation/providers/user_info_provider.dart';
 
@@ -16,11 +16,10 @@ class AuthenticationImpl implements AuthRepository {
   Future<String> login(String email, String password) async {
     final response = await apiService.post('/login', data: {'email': email, 'password': password});
     final token = response.data['token'];
-    final userData = response.data['user'];
-    final User user = User.fromJson(userData);
-      await userProvider.saveUserInfos(user);
-    await apiService.setAuthToken(token);
-    await apiService.setUserID(user.id.toString());
+    final loginData = PreferencesData.fromJson(response.data);
+     await userProvider.saveUserInfos(loginData);
+     await apiService.setAuthToken(token);
+     await apiService.setUserID(loginData.user.id.toString());
     return token;
   }
 

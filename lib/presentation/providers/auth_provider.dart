@@ -23,17 +23,17 @@ class AuthProvider with ChangeNotifier {
     _error = null;
     notifyListeners();
 
-    try {
+   // try {
       _token = await _authRepository.login(email, password);
       _isLoading = false;
       notifyListeners();
       return true;
-    } catch (e) {
-      _error = e.toString();
-      _isLoading = false;
-      notifyListeners();
-      return false;
-    }
+  //  } catch (e) {
+     // _error = e.toString();
+     // _isLoading = false;
+     // notifyListeners();
+     // return false;
+    //}
   }
 
   Future<bool> register(String name, String email, String password) async {

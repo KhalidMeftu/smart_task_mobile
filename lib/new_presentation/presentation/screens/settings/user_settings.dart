@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_colors/app_colors.dart';
 import 'package:smart_mobile_app/common/utils/enums/smart_app_enums.dart';
-import 'package:smart_mobile_app/domain/entity/responses/login_response.dart';
+import 'package:smart_mobile_app/domain/entity/responses/prefs.dart';
 import 'package:smart_mobile_app/new_presentation/presentation/common_widgets/common_appbar/smart_task_appbar.dart';
 import 'package:smart_mobile_app/new_presentation/presentation/common_widgets/custom_button/custom_button.dart';
 import 'package:smart_mobile_app/presentation/providers/theme_provider.dart';
@@ -19,8 +19,6 @@ class UserInfoScreen extends StatelessWidget {
       appBar:  CustomAppBar(),
       body: Consumer<UserInfoProvider>(
         builder: (context, provider, child) {
-          print("User Info");
-          print(provider.user!.preferences!.notifications);
           if (provider.state == UserInfoState.loading) {
             return Center(child: CircularProgressIndicator());
           }
@@ -41,7 +39,7 @@ class UserInfoScreen extends StatelessWidget {
 }
 
 class _UserInfoForm extends StatefulWidget {
-  final User user;
+  final PreferencesData user;
 
   const _UserInfoForm({required this.user});
 
@@ -54,18 +52,33 @@ class __UserInfoFormState extends State<_UserInfoForm> {
   late String _themeMode;
   late int _notifications;
 
+  late int _initialTwoFactorAuth;
+  late String _initialThemeMode;
+  late int _initialNotifications;
+
+  bool get _hasChanges =>
+      _twoFactorAuth != _initialTwoFactorAuth ||
+          _themeMode != _initialThemeMode ||
+          _notifications != _initialNotifications;
+
   @override
   void initState() {
     super.initState();
-    _twoFactorAuth = widget.user.preferences!.twoFactorAuth;
-    _themeMode = widget.user.preferences!.themeMode;
-    _notifications = widget.user.preferences!.notifications;
+    _twoFactorAuth = widget.user.user.preferences!.twoFactorAuth;
+    _themeMode = widget.user.user.preferences!.themeMode;
+    _notifications = widget.user.user.preferences!.notifications;
+
+    // Store initial values to compare later
+    _initialTwoFactorAuth = _twoFactorAuth;
+    _initialThemeMode = _themeMode;
+    _initialNotifications = _notifications;
   }
 
   @override
   Widget build(BuildContext context) {
     final userInfoProvider = Provider.of<UserInfoProvider>(context, listen: false);
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_themeMode == 'dark') {
         themeProvider.setDarkMode(true);
@@ -73,10 +86,10 @@ class __UserInfoFormState extends State<_UserInfoForm> {
         themeProvider.setDarkMode(false);
       }
     });
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
-        spacing: 10,
         children: [
           SwitchListTile(
             title: Text('Two-Factor Authentication'),
@@ -88,8 +101,6 @@ class __UserInfoFormState extends State<_UserInfoForm> {
             },
           ),
 
-
-          // Notifications Toggle
           SwitchListTile(
             title: Text('Notifications'),
             value: _notifications == 1,
@@ -106,10 +117,12 @@ class __UserInfoFormState extends State<_UserInfoForm> {
               alignment: Alignment.bottomRight,
               child: Consumer<ThemeProvider>(
                 builder: (context, darkModeProvider, child) {
-
                   return GestureDetector(
                     onTap: () {
                       darkModeProvider.toggleDarkMode();
+                      setState(() {
+                        _themeMode = darkModeProvider.isDarkMode ? 'dark' : 'light';
+                      });
                     },
                     child: Icon(
                       darkModeProvider.isDarkMode
@@ -124,23 +137,34 @@ class __UserInfoFormState extends State<_UserInfoForm> {
             ),
           ),
 
-
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CustomButton(
-              onTap:  () => updateUserInfo(userInfoProvider),
-              text: "Update",
-              bgColor: SmartTaskAppColors.buttonBackGroundColor,
+          if (_hasChanges) // Show button only when there are changes
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CustomButton(
+                onTap: () => updateUserInfo(userInfoProvider),
+                text: "Update",
+                bgColor: SmartTaskAppColors.buttonBackGroundColor,
+              ),
             ),
-          )
         ],
       ),
     );
   }
 
-  updateUserInfo(UserInfoProvider userInfoProvider) {
-    userInfoProvider.updateUserInfo(_twoFactorAuth==1?true:false,_themeMode,_notifications==1?true:false);
+  void updateUserInfo(UserInfoProvider userInfoProvider) {
+    userInfoProvider.updateUserInfo(
+      _twoFactorAuth == 1 ? true : false,
+      _themeMode,
+      _notifications == 1 ? true : false,
+    );
     userInfoProvider.fetchUserInfo();
+
+    // Reset initial values after update
+    setState(() {
+      _initialTwoFactorAuth = _twoFactorAuth;
+      _initialThemeMode = _themeMode;
+      _initialNotifications = _notifications;
+    });
   }
 }
 

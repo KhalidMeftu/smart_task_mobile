@@ -25,7 +25,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             return Text("");
           } else if (userInfoProvider.state == UserInfoState.success &&
               userInfoProvider.user != null) {
-            return Text("Welcome, ${userInfoProvider.user!.name}", style: SmartTaskFonts.medium(),);
+            return Text("Welcome, ${userInfoProvider.user!.user.name}", style: SmartTaskFonts.medium(),);
           } else {
             return Text("Welcome",style: SmartTaskFonts.medium(),);
           }

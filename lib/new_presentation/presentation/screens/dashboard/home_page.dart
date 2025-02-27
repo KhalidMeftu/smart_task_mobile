@@ -115,23 +115,25 @@ class _HomePageState extends State<HomePage> {
       final token = await getFcmToken();
 
       if (token == null) {
-        if (kDebugMode)
+        if (kDebugMode) {
           print("FCM Token is null, skipping update.");
+        }
         return;
       }
 
-      if (kDebugMode)
+      if (kDebugMode) {
         print("FCM Token: $token");
+      }
 
       final storageService = getIt<SmartLocalStorageServices>();
       final storedFcmToken = await storageService.getData('firebaseToken');
 
       if (token == storedFcmToken) {
-        if (kDebugMode)
+        if (kDebugMode) {
           print("FCM Token is already up to date, no API call needed.");
+        }
         return;
       }
-
 
       final authProvider = getIt<AuthProvider>();
       await authProvider.sendFcmToken(token);
