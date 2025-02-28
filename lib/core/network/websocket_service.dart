@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:smart_mobile_app/domain/entity/responses/get_all_tasks_reponse.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -15,7 +16,7 @@ class WebSocketService {
   bool _isReconnecting = false;
   String? _token;
   String? _userId;
-  final String _webSocketUrl = 'ws://192.168.8.108:6001/app/my-local-key';
+  final String _webSocketUrl = '${dotenv.env['WEBSOCKET_URL']!}:6001/app/my-local-key';
 
   /// Channels that require user ID
   List<String> channels = [

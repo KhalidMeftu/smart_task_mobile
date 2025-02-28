@@ -1,3 +1,4 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 import 'package:smart_mobile_app/data/usecase/task_usecase.dart';
 import 'package:smart_mobile_app/presentation/providers/auth_provider.dart';
@@ -20,7 +21,7 @@ final getIt = GetIt.instance;
 
 Future<void> setupLocator() async {
   getIt.registerLazySingleton<ApiClient>(
-      () => ApiClient(baseUrl: ""));
+      () => ApiClient(baseUrl: '${dotenv.env['BASE_URL']!}:8000/api'));
 
   getIt.registerLazySingleton<WebSocketService>(() => WebSocketService());
   getIt.registerLazySingleton(() => AppDatabase.instance);
