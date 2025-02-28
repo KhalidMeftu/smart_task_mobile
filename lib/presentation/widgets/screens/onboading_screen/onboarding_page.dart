@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_colors/app_colors.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_fonts/app_fonts.dart';
+import 'package:smart_mobile_app/common/app_ui_configs/app_strings/app_strings.dart';
 import 'package:smart_mobile_app/presentation/widgets/screens/login_screen/login_page.dart';
 import 'component/onboarding_contents.dart';
 
@@ -130,7 +131,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               textStyle: TextStyle(fontSize: 13),
                             ),
                             child: Text(
-                              "START",
+                              SmartStrings.start,
                               style: SmartTaskFonts.medium().copyWith(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w400,
@@ -154,7 +155,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                       fontWeight: FontWeight.w600),
                                 ),
                                 child: Text(
-                                  "SKIP",
+                                  SmartStrings.skip,
                                   style: SmartTaskFonts.medium().copyWith(
                                       fontSize: 13,
                                       fontWeight: FontWeight.w400,
@@ -181,7 +182,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                       fontSize: 13,
                                       fontWeight: FontWeight.w400),
                                 ),
-                                child: Text("NEXT",
+                                child: Text(SmartStrings.next,
                                     style: SmartTaskFonts.medium().copyWith(
                                         fontSize: 13,
                                         fontWeight: FontWeight.w400,

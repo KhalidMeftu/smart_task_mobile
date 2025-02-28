@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_colors/app_colors.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_fonts/app_fonts.dart';
+import 'package:smart_mobile_app/common/app_ui_configs/app_strings/app_strings.dart';
 import 'package:smart_mobile_app/core/network/api_client.dart';
 import 'package:smart_mobile_app/dependency_injection.dart';
 import 'package:smart_mobile_app/domain/entity/responses/prefs.dart';
@@ -48,12 +49,12 @@ class _TwoFactorVerificationScreenState extends State<TwoFactorVerificationScree
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Invalid 2FA code")),
+           SnackBar(content: Text(SmartStrings.invalid2FACode)),
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: ${e.toString()}")),
+        SnackBar(content: Text("${SmartStrings.errorText}${e.toString()}")),
       );
     }
 
@@ -70,7 +71,7 @@ class _TwoFactorVerificationScreenState extends State<TwoFactorVerificationScree
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-             Center(child: Text("Enter the 6-digit code from your authenticator app",maxLines: 2,
+             Center(child: Text(SmartStrings.enterSixDigitCode,maxLines: 2,
                overflow: TextOverflow.ellipsis, style: SmartTaskFonts.medium(),)),
             const SizedBox(height: 10),
             TextField(
@@ -79,14 +80,14 @@ class _TwoFactorVerificationScreenState extends State<TwoFactorVerificationScree
               maxLength: 6,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: "2FA Code",
+                labelText: SmartStrings.twoFactorCode,
               ),
             ),
             const SizedBox(height: 20),
 
             CustomButton(
               onTap: () => isLoading ? null : _verify2FA,
-              text: "Verify",
+              text: SmartStrings.verify,
               bgColor: SmartTaskAppColors.buttonBackGroundColor,
             ),
           ],

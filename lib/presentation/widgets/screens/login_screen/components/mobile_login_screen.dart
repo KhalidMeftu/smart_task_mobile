@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_colors/app_colors.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_fonts/app_fonts.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_paddings/app_paddings.dart';
+import 'package:smart_mobile_app/common/app_ui_configs/app_strings/app_strings.dart';
 import 'package:smart_mobile_app/common/routes/app_routes.dart';
 import 'package:smart_mobile_app/core/network/api_client.dart';
 import 'package:smart_mobile_app/core/network/websocket_service.dart';
@@ -58,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Invalid email or password")),
+          SnackBar(content: Text(SmartStrings.wrongCredential)),
         );
       }
     }
@@ -72,18 +73,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       final response = await apiService.post('/loginWithGoogle');
-      print("Google Login response.");
-      print(response.toString());
       if (response.statusCode == 200) {
 
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Invalid 2FA code")),
+          SnackBar(content: Text(SmartStrings.invalid2FA)),
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: ${e.toString()}")),
+        SnackBar(content: Text("${SmartStrings.errorText} ${e.toString()}")),
       );
     }
 
@@ -111,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
           Center(
             child: Text(
-              "Smart Task Management",
+              SmartStrings.smartText,
               maxLines: 1,
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
@@ -126,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 CustomTextField(
                   required: true,
-                  hintText: 'Email',
+                  hintText: SmartStrings.email,
                   controller: emailController,
                   keyboardType: TextInputType.emailAddress,
                 ),
@@ -135,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       vertical: SmartTaskPaddings.s16),
                   child: CustomTextField(
                     required: true,
-                    hintText: 'Password',
+                    hintText: SmartStrings.password,
                     controller: passwordController,
                     isPassword: true,
                   ),
@@ -145,7 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ? const CircularProgressIndicator()
                     : CustomButton(
                         onTap: _login,
-                        text: "Login",
+                        text: SmartStrings.login,
                         bgColor: SmartTaskAppColors.buttonBackGroundColor,
                       ),
                 const SizedBox(height: SmartTaskPaddings.s16),
@@ -153,15 +152,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      "Don’t have an Account? ",
-                      style: TextStyle(color: SmartTaskAppColors.primaryColor),
+                      SmartStrings.dontHaveAccount,
+                      style: SmartTaskFonts.medium().copyWith(color: SmartTaskAppColors.primaryColor),
                     ),
                     GestureDetector(
                       onTap: () => Navigator.pushNamed(
                           context, SmartTaskAppRoutes.signUpPage),
                       child: Text(
-                        "Sign Up",
-                        style: TextStyle(
+                        SmartStrings.signUp,
+                        style: SmartTaskFonts.medium().copyWith(
                           color: SmartTaskAppColors.primaryColor,
                           fontWeight: FontWeight.bold,
                         ),

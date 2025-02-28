@@ -12,36 +12,30 @@ class AuthWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Consumer<AuthTokenProvider>(
       builder: (context, authProvider, _) {
         if (authProvider.isLoading) {
-
-          return Scaffold(
+          return const Scaffold(
             body: Center(
               child: CircularProgressIndicator(),
             ),
           );
         }
-        else if (authProvider.token != null && authProvider.isOnBoardLoaded) {
-          final WebSocketService _webSocketService = getIt<WebSocketService>();
-          _webSocketService.connect();
 
+        final WebSocketService _webSocketService = getIt<WebSocketService>();
+        _webSocketService.connect();
+
+        if (authProvider.token != null) {
           return HomePage();
-        }  else if (authProvider.token == null && !authProvider.isOnBoardLoaded) {
-          final WebSocketService _webSocketService = getIt<WebSocketService>();
-          _webSocketService.connect();
-
-          return OnboardingScreen();
-        }  else if (authProvider.token != null) {
-          final WebSocketService _webSocketService = getIt<WebSocketService>();
-          _webSocketService.connect();
-          return HomePage();
-        } else {
-
-          return LoginPage();
         }
+
+        if (!authProvider.isOnBoardLoaded) {
+          return OnboardingScreen();
+        }
+
+        return LoginPage();
       },
     );
+
   }
 }

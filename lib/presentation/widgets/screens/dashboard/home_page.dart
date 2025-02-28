@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_colors/app_colors.dart';
+import 'package:smart_mobile_app/common/app_ui_configs/app_strings/app_strings.dart';
 import 'package:smart_mobile_app/common/routes/app_routes.dart';
 import 'package:smart_mobile_app/common/utils/functions/utils_functions.dart';
 import 'package:smart_mobile_app/presentation/providers/tasks_provider.dart';
@@ -42,7 +43,7 @@ class _HomePageState extends State<HomePage> {
             child: TextField(
               controller: searchController,
               decoration: InputDecoration(
-                hintText: "Search tasks...",
+                hintText: SmartStrings.searchTasks,
                 prefixIcon: Icon(Icons.search, color: Colors.grey),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_colors/app_colors.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_fonts/app_fonts.dart';
+import 'package:smart_mobile_app/common/app_ui_configs/app_strings/app_strings.dart';
 import 'package:smart_mobile_app/core/network/api_client.dart';
 import 'package:smart_mobile_app/presentation/widgets/common_widgets/common_appbar/smart_task_appbar.dart';
 import 'package:smart_mobile_app/presentation/widgets/common_widgets/custom_button/custom_button.dart';
@@ -42,12 +43,12 @@ class _Enable2FAScreenState extends State<Enable2FAScreen> {
         });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Failed to enable 2FA")),
+           SnackBar(content: Text(SmartStrings.failedToLoad2FA)),
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: ${e.toString()}")),
+        SnackBar(content: Text("${SmartStrings.errorText}${e.toString()}")),
       );
     }
 

@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBowtNdmy5mTw7FJ-eJXgDNpzPokZdoaZs',
-    appId: '1:1090425378954:android:cf7600fa48e5c78bc23573',
-    messagingSenderId: '1090425378954',
-    projectId: 'smarttasktwo',
-    storageBucket: 'smarttasktwo.firebasestorage.app',
+    apiKey: 'AIzaSyA5NLl13AvlHm9jMsxC7EcnOHSlhRyCMiI',
+    appId: '1:594368052227:android:518c14e0d5a433ecf92236',
+    messagingSenderId: '594368052227',
+    projectId: 'smarttaskapp-af1db',
+    storageBucket: 'smarttaskapp-af1db.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBf8XQtf_C_JSCjAQ2azXHBQWWfK2da-XU',
-    appId: '1:1090425378954:ios:f67dc6d23cdc13b8c23573',
-    messagingSenderId: '1090425378954',
-    projectId: 'smarttasktwo',
-    storageBucket: 'smarttasktwo.firebasestorage.app',
+    apiKey: 'AIzaSyB-eZP3Ip9uKPcpbdmbd36MA5xE8ISJJa4',
+    appId: '1:594368052227:ios:e8124540e7782b80f92236',
+    messagingSenderId: '594368052227',
+    projectId: 'smarttaskapp-af1db',
+    storageBucket: 'smarttaskapp-af1db.firebasestorage.app',
     iosBundleId: 'com.smarttask.kalidapp.smartMobileApp',
   );
 

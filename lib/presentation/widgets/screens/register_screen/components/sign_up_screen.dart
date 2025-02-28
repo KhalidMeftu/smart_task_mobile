@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_colors/app_colors.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_fonts/app_fonts.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_paddings/app_paddings.dart';
+import 'package:smart_mobile_app/common/app_ui_configs/app_strings/app_strings.dart';
 import 'package:smart_mobile_app/common/routes/app_routes.dart';
 import 'package:smart_mobile_app/dependency_injection.dart';
 import 'package:smart_mobile_app/presentation/providers/auth_provider.dart';
@@ -30,7 +31,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (_formKey.currentState!.validate()) {
       if (passwordController.text != repeatPasswordController.text) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Passwords do not match")),
+           SnackBar(content: Text(SmartStrings.passwordNotMatching)),
         );
         return;
       }
@@ -50,7 +51,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         Navigator.pushReplacementNamed(context, SmartTaskAppRoutes.homePage);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Registration failed. Try again.")),
+           SnackBar(content: Text(SmartStrings.registartionFailed)),
         );
       }
     }
@@ -67,7 +68,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           CustomImageView(imagePath: 'assets/images/login_signup_header_image.png'),
           Center(
             child: Text(
-              "Smart Task Management",
+              SmartStrings.smartText,
               maxLines: 1,
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
@@ -90,28 +91,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(height: SmartTaskPaddings.s16),
                 CustomTextField(
                   required: true,
-                  hintText: 'Email',
+                  hintText: SmartStrings.email,
                   controller: emailController,
                   keyboardType: TextInputType.emailAddress,
                 ),
                 const SizedBox(height: SmartTaskPaddings.s16),
                 CustomTextField(
                   required: true,
-                  hintText: 'Password',
+                  hintText: SmartStrings.password,
                   controller: passwordController,
                   isPassword: true,
                 ),
                 const SizedBox(height: SmartTaskPaddings.s16),
                 CustomTextField(
                   required: true,
-                  hintText: 'Repeat Password',
+                  hintText: SmartStrings.repeatPassword,
                   controller: repeatPasswordController,
                   isPassword: true,
                 ),
                 const SizedBox(height: SmartTaskPaddings.s16),
                 CustomButton(
                   onTap: isLoading ? null : _register,
-                  text: isLoading ? "Registering..." : "Register",
+                  text: isLoading ? SmartStrings.registering : SmartStrings.register,
                   bgColor: SmartTaskAppColors.buttonBackGroundColor,
                 ),
                 const SizedBox(height: SmartTaskPaddings.s16),
@@ -119,7 +120,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      "Already have an account? ",
+                      SmartStrings.alreadyHaveAccount,
                       style: SmartTaskFonts.medium().copyWith(
                         fontSize: 13,
                         fontWeight: FontWeight.w400,
@@ -131,7 +132,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Navigator.pushNamed(context, SmartTaskAppRoutes.loginPage);
                       },
                       child: Text(
-                        "Login",
+                       SmartStrings.login,
                         style: SmartTaskFonts.medium().copyWith(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,

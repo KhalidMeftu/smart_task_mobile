@@ -20,7 +20,7 @@ final getIt = GetIt.instance;
 
 Future<void> setupLocator() async {
   getIt.registerLazySingleton<ApiClient>(
-      () => ApiClient(baseUrl: 'http://192.168.8.108:8000/api'));
+      () => ApiClient(baseUrl: ""));
 
   getIt.registerLazySingleton<WebSocketService>(() => WebSocketService());
   getIt.registerLazySingleton(() => AppDatabase.instance);

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_colors/app_colors.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_fonts/app_fonts.dart';
+import 'package:smart_mobile_app/common/app_ui_configs/app_strings/app_strings.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/custom_uis/custom_divider.dart';
 import 'package:smart_mobile_app/common/utils/enums/smart_app_enums.dart';
 import 'package:smart_mobile_app/common/utils/functions/utils_functions.dart';
@@ -108,8 +109,8 @@ class _AddTaskState extends State<AddTask> {
                   ),
                   child: buildText(
                     _rangeStart != null && _rangeEnd != null
-                        ? 'Task starting at ${formatDate(dateTime: _rangeStart.toString())} - ${formatDate(dateTime: _rangeEnd.toString())}'
-                        : 'Select a date range',
+                        ? '${SmartStrings.taskStartingAt} ${formatDate(dateTime: _rangeStart.toString())} - ${formatDate(dateTime: _rangeEnd.toString())}'
+                        : SmartStrings.selectDateRange,
                     SmartTaskAppColors.primaryColor,
                     9,
                     FontWeight.w400,
@@ -128,7 +129,7 @@ class _AddTaskState extends State<AddTask> {
                   } else if (userProvider.userState == UserState.error) {
                     return Center(
                         child: Text(userProvider.errorMessage ??
-                            "Failed to load users"));
+                           SmartStrings.failToLoad));
                   } else if (userProvider.userState == UserState.loaded) {
                     return SizedBox(
                       height: 110,
@@ -195,22 +196,22 @@ class _AddTaskState extends State<AddTask> {
               ),
 
               CustomDivider(),
-              buildText('Title', SmartTaskAppColors.blackColor, 15,
+              buildText(SmartStrings.title, SmartTaskAppColors.blackColor, 15,
                   FontWeight.bold, TextAlign.start, TextOverflow.clip),
               const SizedBox(height: 10),
               BuildTextField(
-                hint: "Task Title",
+                hint:SmartStrings.description ,
                 controller: titleController,
                 inputType: TextInputType.text,
                 fillColor: SmartTaskAppColors.whiteColor,
                 onChange: (value) => setState(() {}),
               ),
               const SizedBox(height: 20),
-              buildText('Description', SmartTaskAppColors.blackColor, 15,
+              buildText(SmartStrings.description, SmartTaskAppColors.blackColor, 15,
                   FontWeight.bold, TextAlign.start, TextOverflow.clip),
               const SizedBox(height: 10),
               BuildTextField(
-                hint: "Task Description",
+                hint: SmartStrings.taskTitle,
                 controller: descriptionController,
                 inputType: TextInputType.multiline,
                 fillColor: SmartTaskAppColors.whiteColor,
@@ -225,12 +226,12 @@ class _AddTaskState extends State<AddTask> {
                     onTap: () {
                       Navigator.pop(context);
                     },
-                    text: "Cancel",
+                    text: SmartStrings.cancel,
                     bgColor: SmartTaskAppColors.greyColor,
                   ),
                   Consumer<TaskProvider>(
                     builder: (context, taskProvider, child) {
-                      String buttonText = "Save";
+                      String buttonText = SmartStrings.save;
                       VoidCallback? onTap = _isSaveEnabled()
                           ? () {
 
@@ -243,7 +244,7 @@ class _AddTaskState extends State<AddTask> {
                           : null;
 
                       if (taskProvider.taskState == TaskState.loading) {
-                        buttonText = "Saving...";
+                        buttonText = SmartStrings.saving;
                         onTap = null;
                       } else if (taskProvider.taskState == TaskState.success) {
                         WidgetsBinding.instance.addPostFrameCallback((_){
@@ -281,7 +282,7 @@ class _AddTaskState extends State<AddTask> {
     return utcDateTime.toLocal();
   }
 
-  String formatDate({required String dateTime, format = "dd MMM, yyyy"}) {
+  String formatDate({required String dateTime, format = SmartStrings.dateFormat}) {
     final localDateTime = toDate(dateTime: dateTime);
     return DateFormat(format).format(localDateTime);
   }

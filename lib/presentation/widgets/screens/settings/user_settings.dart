@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_colors/app_colors.dart';
+import 'package:smart_mobile_app/common/app_ui_configs/app_strings/app_strings.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/custom_uis/custom_divider.dart';
 import 'package:smart_mobile_app/common/utils/enums/smart_app_enums.dart';
 import 'package:smart_mobile_app/domain/entity/responses/prefs.dart';
@@ -89,7 +91,7 @@ class __UserInfoFormState extends State<_UserInfoForm> {
       child: Column(
         children: [
           SwitchListTile(
-            title: const Text('Two-Factor Authentication'),
+            title:  Text(SmartStrings.twoFactor),
             value: _twoFactorAuth == 1,
             onChanged: (value) async {
               setState(() {
@@ -107,15 +109,19 @@ class __UserInfoFormState extends State<_UserInfoForm> {
           CustomDivider(),
 
           SwitchListTile(
-            title: const Text('Notifications'),
+            title: Text(SmartStrings.notifications),
             value: _notifications == 1,
             onChanged: (value) {
               setState(() {
                 _notifications = value ? 1 : 0;
-                print("Notification Value Updated: $_notifications");
+                if (kDebugMode) {
+                  print("Notification Value Updated: $_notifications");
+                }
               });
               if (_notifications == 1) {
-                print("Navigating to Enable2FAScreen");
+                if (kDebugMode) {
+                  print("Navigating to Enable2FAScreen");
+                }
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -165,7 +171,7 @@ class __UserInfoFormState extends State<_UserInfoForm> {
               padding: const EdgeInsets.all(8.0),
               child: CustomButton(
                 onTap: () => updateUserInfo(userInfoProvider),
-                text: "Update",
+                text: SmartStrings.update,
                 bgColor: SmartTaskAppColors.buttonBackGroundColor,
               ),
             ),
