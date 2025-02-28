@@ -9,7 +9,7 @@ on:
 
   push:
     branches:
-      - ws-task-test
+      - dev
 
 jobs:
   test:
