@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_colors/app_colors.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_fonts/app_fonts.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_paddings/app_paddings.dart';
+import 'package:smart_mobile_app/common/app_ui_configs/app_resources/app_resources.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_strings/app_strings.dart';
 import 'package:smart_mobile_app/common/routes/app_routes.dart';
 import 'package:smart_mobile_app/core/network/api_client.dart';
@@ -106,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
         children: <Widget>[
           const SizedBox(height: 70),
           CustomImageView( height: 200, width: 300,
-              imagePath: 'assets/images/login_signup_header_image.png'),
+              imagePath: SmartTaskAssets.loginSignUpImage),
 
           Center(
             child: Text(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_colors/app_colors.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_fonts/app_fonts.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_paddings/app_paddings.dart';
+import 'package:smart_mobile_app/common/app_ui_configs/app_resources/app_resources.dart';
 import 'package:smart_mobile_app/common/app_ui_configs/app_strings/app_strings.dart';
 import 'package:smart_mobile_app/common/routes/app_routes.dart';
 import 'package:smart_mobile_app/dependency_injection.dart';
@@ -65,7 +66,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           const SizedBox(height: 20),
-          CustomImageView(imagePath: 'assets/images/login_signup_header_image.png'),
+          CustomImageView(imagePath: SmartTaskAssets.loginSignUpImage),
           Center(
             child: Text(
               SmartStrings.smartText,
