@@ -1,6 +1,6 @@
 # smart_mobile_app
 
-smart task app which will be used on online and offline mode to manage tasks in team
+smart task app which will be used on online and offline mode to manage tasks in team(ITS STILL IN PROGRESS APP SO ONCE I FINISH ALL EXPECTED FUNCTIONALITIES ALL READ ME AND HOW TO INSTALL WITH BACKEND WILL BE PUBLISHED)
 
 ## Getting Started
 
